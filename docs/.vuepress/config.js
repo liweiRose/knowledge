@@ -6,7 +6,7 @@ module.exports = {
   description: 'Knowledge summary',
   serviceWorker: false,
   themeConfig: {
-    repo: 'liweirose/blog',
+    repo: 'liweirose/knowledge-system',
     editLinks: true,
     docsDir: 'docs',
     editLinkText: '在 GitHub 上编辑此页',
