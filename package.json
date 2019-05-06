@@ -1,0 +1,14 @@
+{
+  "name": "blog",
+  "version": "1.0.0",
+  "description": "Knowledge summary",
+  "scripts": {
+    "dev": "vuepress dev docs",
+    "build": "vuepress build docs"
+  },
+  "author": "liweirose",
+  "license": "ISC",
+  "devDependencies": {
+    "vuepress": "^0.10.0"
+  }
+}
