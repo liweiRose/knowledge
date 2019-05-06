@@ -1,12 +1,12 @@
 module.exports = {
-  base: '/blog/',
+  base: '/knowledge/',
   dest: 'dist',
   title: 'Summary of front-end knowledge system',
   port: 9090,
   description: 'Knowledge summary',
   serviceWorker: false,
   themeConfig: {
-    repo: 'liweirose/knowledge-system',
+    repo: 'liweirose/knowledge',
     editLinks: true,
     docsDir: 'docs',
     editLinkText: '在 GitHub 上编辑此页',
