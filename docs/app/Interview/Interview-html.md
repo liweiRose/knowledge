@@ -411,3 +411,23 @@ em 和 strong 是表达要素(phrase elements)。
 对于`html`的标准属性来说，`attribute`和`property`是同步的，是会自动更新的，
 
 但是对于自定义的属性来说，他们是不同步的.
+### viewport
+```js
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    // width    设置viewport宽度，为一个正整数，或字符串‘device-width’
+    // device-width  设备宽度
+    // height   设置viewport高度，一般设置了宽度，会自动解析出高度，可以不用设置
+    // initial-scale    默认缩放比例（初始缩放比例），为一个数字，可以带小数
+    // minimum-scale    允许用户最小缩放比例，为一个数字，可以带小数
+    // maximum-scale    允许用户最大缩放比例，为一个数字，可以带小数
+    // user-scalable    是否允许手动缩放
+```
+延伸 提问 :怎样处理 移动端 1px 被 渲染成 2px 问题?
+```js
+    1 局部处理
+        meta标签中的 viewport属性 ，initial-scale 设置为 1 
+        rem 按照设计稿标准走，外加利用transfrome 的scale(0.5) 缩小一倍即可；
+    2 全局处理
+        meta标签中的 viewport属性 ，initial-scale 设置为 0.5
+        rem 按照设计稿标准走即可
+```
