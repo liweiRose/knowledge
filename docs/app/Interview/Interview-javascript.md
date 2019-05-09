@@ -535,6 +535,38 @@ console.log('script end');
 
 通过上述的  Event loop 顺序可知，如果宏任务中的异步代码有大量的计算并且需要操作 DOM 的话，为了更快的 界面响应，我们可以把操作 DOM 放入微任务中。
 - [Node 中的 Event loop](https://juejin.im/post/5aa8a07cf265da238a3022a4)
+### 事件的各个阶段
+```js
+1：捕获阶段 ---> 2：目标阶段 ---> 3：冒泡阶段
+document   ---> target目标 ----> document
+
+由此，addEventListener的第三个参数设置为true和false的区别已经非常清晰了：
+
+true表示该元素在事件的“捕获阶段”（由外往内传递时）响应事件；
+
+false表示该元素在事件的“冒泡阶段”（由内向外传递时）响应事件。
+
+```
+### let var const
+```js
+let 允许你声明一个作用域被限制在块级中的变量、语句或者表达式
+    let绑定不受变量提升的约束，这意味着let声明不会被提升到当前
+    该变量处于从块开始到初始化处理的“暂存死区”。
+
+var 声明变量的作用域限制在其声明位置的上下文中，而非声明变量总是全局的
+    由于变量声明（以及其他声明）总是在任意代码执行之前处理的，所以在代码中的任意位置声明变量总是等效于在代码开头声明
+    
+const 声明创建一个值的只读引用 (即指针)
+    这里就要介绍下 JS 常用类型 
+    String、Number、Boolean、Array、Object、Null、Undefined
+    其中基本类型 有 Undefined、Null、Boolean、Number、String，保存在栈中；
+    复合类型 有 Array、Object ，保存在堆中；
+    
+    基本数据当值发生改变时，那么其对应的指针也将发生改变，故造成 const申明基本数据类型时，
+    再将其值改变时，将会造成报错， 例如 const a = 3 ; a = 5 时 将会报错；
+    但是如果是复合类型时，如果只改变复合类型的其中某个Value项时， 将还是正常使用；
+
+```
 ### 参考文章
 
 - [fe-interview](https://microzz.com/2017/02/01/fe-interview/)
