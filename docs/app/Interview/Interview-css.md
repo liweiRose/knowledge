@@ -185,3 +185,117 @@ Width = width(包含padding-left + padding-right + border-left + border-right)
 ```
 Height = height(包含padding-top + padding-bottom + border-top + border-bottom)
 ```
+### 字体font-family
+```js
+    @ 宋体      SimSun
+    @ 黑体      SimHei
+    @ 微信雅黑   Microsoft Yahei
+    @ 微软正黑体 Microsoft JhengHei
+    @ 新宋体    NSimSun
+    @ 新细明体  MingLiU
+    @ 细明体    MingLiU
+    @ 标楷体    DFKai-SB
+    @ 仿宋     FangSong
+    @ 楷体     KaiTi
+    @ 仿宋_GB2312  FangSong_GB2312
+    @ 楷体_GB2312  KaiTi_GB2312  
+    @
+    @ 说明：中文字体多数使用宋体、雅黑，英文用Helvetica
+    
+    body { font-family: Microsoft Yahei,SimSun,Helvetica; } 
+```
+### 消除transition闪屏
+```js
+    .css {
+        -webkit-transform-style: preserve-3d;
+        -webkit-backface-visibility: hidden;
+        -webkit-perspective: 1000;
+    }
+    过渡动画（在没有启动硬件加速的情况下）会出现抖动的现象， 以上的 解决方案只是改变 视角 来启动硬件加速的一种方式；
+    启动硬件加速的 另外一种方式： 
+        .css {
+            -webkit-transform: translate3d(0,0,0);
+            -moz-transform: translate3d(0,0,0);
+            -ms-transform: translate3d(0,0,0);
+            transform: translate3d(0,0,0);
+        }
+    
+    启动硬件加速
+    最常用的方式：translate3d、translateZ、transform
+
+    opacity属性/过渡动画（需要动画执行的过程中才会创建合成层，动画没有开始或结束后元素还会回到之前的状态）
+
+    will-chang属性（这个比较偏僻），一般配合opacity与translate使用（而且经测试，除了上述可以引发硬件加速的属性外，
+    其它属性并不会变成复合层），
+
+    弊端： 硬件加速会导致 CPU性能占用量过大，电池电量消耗加大 ；因此 尽量避免泛滥使用硬件加速。
+
+
+```
+### css实现单行文本溢出显示 ...
+效果：
+
+<img :src="$withBase('/images/cssflow1.png')">
+
+```js
+overflow: hidden;
+text-overflow:ellipsis;
+white-space: nowrap;
+当然还需要加宽度width属来兼容部分浏览。
+
+```
+### 实现多行文本溢出显示...
+效果：
+
+<img :src="$withBase('/images/cssovferlow.png')">
+
+```js
+display: -webkit-box;
+-webkit-box-orient: vertical;
+-webkit-line-clamp: 3;
+overflow: hidden;
+
+```
+适用范围：
+
+因使用了WebKit的CSS扩展属性，该方法适用于WebKit浏览器及移动端；
+注：
+```js
+1、-webkit-line-clamp用来限制在一个块元素显示的文本的行数。 为了实现该效果，它需要组合其他的WebKit属性。常见结合属性：
+2、display: -webkit-box; 必须结合的属性 ，将对象作为弹性伸缩盒子模型显示 。
+3、-webkit-box-orient 必须结合的属性 ，设置或检索伸缩盒对象的子元素的排列方式 。
+
+```
+如果你觉着这样还不够美观， 那么就接着往下看：
+
+<img :src="$withBase('/images/cssflow2.png')">
+
+实现方法
+```js
+div {
+    position: relative;
+    line-height: 20px;
+    max-height: 40px;
+    overflow: hidden;
+}
+
+div:after {
+    content: "..."; position: absolute; bottom: 0; right: 0; padding-left: 40px;
+    background: -webkit-linear-gradient(left, transparent, #fff 55%);
+    background: -o-linear-gradient(right, transparent, #fff 55%);
+    background: -moz-linear-gradient(right, transparent, #fff 55%);
+    background: linear-gradient(to right, transparent, #fff 55%);
+}
+
+不要只顾着吃，要注意胃口，此方法有个弊端 那就是 【未超出行的情况下也会出现省略号】 ，这样会不会很挫！！！ 没办法，只能结合JS 进行优化该方法了。
+
+
+```
+注：
+```js
+
+1、将height设置为line-height的整数倍，防止超出的文字露出。
+2、给p::after添加渐变背景可避免文字只显示一半。
+3、由于ie6-7不显示content内容，所以要添加标签兼容ie6-7（如：<span>…<span/>）；兼容ie8需要将::after替换成:after。
+
+```
