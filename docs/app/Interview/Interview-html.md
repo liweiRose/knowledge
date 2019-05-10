@@ -431,3 +431,72 @@ em 和 strong 是表达要素(phrase elements)。
         meta标签中的 viewport属性 ，initial-scale 设置为 0.5
         rem 按照设计稿标准走即可
 ```
+### 可能用到的meta标签
+```js
+    
+    <!-- 设置缩放 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui" />
+    <!-- 可隐藏地址栏，仅针对IOS的Safari（注：IOS7.0版本以后，safari上已看不到效果） -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <!-- 仅针对IOS的Safari顶端状态条的样式（可选default/black/black-translucent ） -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <!-- IOS中禁用将数字识别为电话号码/忽略Android平台中对邮箱地址的识别 -->
+    <meta name="format-detection"content="telephone=no, email=no" />
+
+    其他meta标签
+    <!-- 启用360浏览器的极速模式(webkit) -->
+    <meta name="renderer" content="webkit">
+    <!-- 避免IE使用兼容模式 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- 针对手持设备优化，主要是针对一些老的不识别viewport的浏览器，比如黑莓 -->
+    <meta name="HandheldFriendly" content="true">
+    <!-- 微软的老式浏览器 -->
+    <meta name="MobileOptimized" content="320">
+    <!-- uc强制竖屏 -->
+    <meta name="screen-orientation" content="portrait">
+    <!-- QQ强制竖屏 -->
+    <meta name="x5-orientation" content="portrait">
+    <!-- UC强制全屏 -->
+    <meta name="full-screen" content="yes">
+    <!-- QQ强制全屏 -->
+    <meta name="x5-fullscreen" content="true">
+    <!-- UC应用模式 -->
+    <meta name="browsermode" content="application">
+    <!-- QQ应用模式 -->
+    <meta name="x5-page-mode" content="app">
+    <!-- windows phone 点击无高光 -->
+    <meta name="msapplication-tap-highlight" content="no">
+
+```
+### audio元素和video元素在ios和andriod中无法自动播放
+```js
+    
+    原因： 因为各大浏览器都为了节省流量，做出了优化，在用户没有行为动作时（交互）不予许自动播放；
+
+    /音频，写法一
+    <audio src="music/bg.mp3" autoplay loop controls>你的浏览器还不支持哦</audio>
+    
+    //音频，写法二
+    <audio controls="controls"> 
+        <source src="music/bg.ogg" type="audio/ogg"></source>
+        <source src="music/bg.mp3" type="audio/mpeg"></source>
+        优先播放音乐bg.ogg，不支持在播放bg.mp3
+    </audio>
+    
+    //JS绑定自动播放（操作window时，播放音乐）
+    $(window).one('touchstart', function(){
+        music.play();
+    })
+    
+    //微信下兼容处理
+    document.addEventListener("WeixinJSBridgeReady", function () {
+        music.play();
+    }, false);
+    
+    //小结
+    //1.audio元素的autoplay属性在IOS及Android上无法使用，在PC端正常；
+    //2.audio元素没有设置controls时，在IOS及Android会占据空间大小，而在PC端Chrome是不会占据任何空间；
+    //3.注意不要遗漏微信的兼容处理需要引用微信JS；
+
+
+```
