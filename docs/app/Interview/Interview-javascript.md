@@ -567,6 +567,49 @@ const 声明创建一个值的只读引用 (即指针)
     但是如果是复合类型时，如果只改变复合类型的其中某个Value项时， 将还是正常使用；
 
 ```
+### 箭头函数
+```js
+    语法比函数表达式更短，并且不绑定自己的this，arguments，super或 new.target。
+    这些函数表达式最适合用于非方法函数，并且它们不能用作构造函数。
+    
+```
+### 快速的让一个数组乱序
+```js
+    var arr = [1,2,3,4,5,6,7,8,9,10];
+    arr.sort(function(){
+        return Math.random() - 0.5;
+    })
+    console.log(arr);
+
+```
+### JS 判断设备来源
+```js
+    function deviceType(){
+        var ua = navigator.userAgent;
+        var agent = ["Android", "iPhone", "SymbianOS", "Windows Phone", "iPad", "iPod"];    
+        for(var i=0; i<len,len = agent.length; i++){
+            if(ua.indexOf(agent[i])>0){         
+                break;
+            }
+        }
+    }
+    deviceType();
+    window.addEventListener('resize', function(){
+        deviceType();
+    })
+
+
+    微信的 有些不太一样
+    function isWeixin(){
+        var ua = navigator.userAgent.toLowerCase();
+        if(ua.match(/MicroMessenger/i)=='micromessenger'){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+```
 ### 参考文章
 
 - [fe-interview](https://microzz.com/2017/02/01/fe-interview/)
