@@ -610,6 +610,101 @@ const 声明创建一个值的只读引用 (即指针)
     }
 
 ```
+### 最快捷的数组求最大值
+```js
+    var arr = [ 1,5,1,7,5,9];
+    Math.max(...arr)  // 9 
+```
+### 更短的数组去重写法
+```js
+    [...new Set([2,"12",2,12,1,2,1,6,12,13,6])]
+    
+    // [2, "12", 12, 1, 6, 13]
+```
+### 下面代码输出结果？为什么？
+```js
+Function.prototype.a = 'a';
+Object.prototype.b = 'b';
+function Person(){};
+var p = new Person();
+console.log('p.a: '+ p.a); // p.a: undefined
+console.log('p.b: '+ p.b); // p.b: b
+```
+### 下面代码输出结果？为什么？
+```js
+const person = {
+  namea: 'menglinghua',
+  say: function (){
+    return function (){
+      console.log(this.namea);
+    };
+  }
+};
+person.say()(); // undefined
+```
+```js
+const person = {
+  namea: 'menglinghua',
+  say: function (){
+    return () => {
+      console.log(this.namea);
+    };
+  }
+};
+person.say()(); // menglinghua
+```
+```js
+setTimeout(() => console.log('a'), 0);
+var p = new Promise((resolve) => {
+  console.log('b');
+  resolve();
+});
+p.then(() => console.log('c'));
+p.then(() => console.log('d'));
+console.log('e');
+// 结果：b e c d a
+// 任务队列优先级：promise.Trick()>promise的回调>setTimeout>setImmediate
+```
+```js
+async function async1() {
+    console.log("a");
+    await  async2(); //执行这一句后，await会让出当前线程，将后面的代码加到任务队列中，然后继续执行函数后面的同步代码
+    console.log("b");
+
+}
+async function async2() {
+   console.log( 'c');
+}
+console.log("d");
+setTimeout(function () {
+    console.log("e");
+},0);
+async1();
+new Promise(function (resolve) {
+    console.log("f");
+    resolve();
+}).then(function () {
+    console.log("g");
+});
+console.log('h');
+// 谁知道为啥结果不一样？？？？？？？？？？？？？
+// 直接在控制台中运行结果：      d a c f h g b e
+// 在页面的script标签中运行结果：d a c f h b g e
+```
+### js bind 实现机制？手写一个 bind 方法？
+```js
+// 代码来自书籍 《javaScript 模式》
+if (typeof Function.prototype.bind === "undefined"){
+  Function.prototype.bind = function (thisArgs){
+    var fn = this,
+        slice = Array.prototype.slice,
+        args = slice.call(arguments, 1);
+    return function (){
+      return fn.apply(thisArgs, args.concat(slice.call(arguments)));
+    }
+  }
+}
+```
 ### 参考文章
 
 - [fe-interview](https://microzz.com/2017/02/01/fe-interview/)
