@@ -299,3 +299,66 @@ div:after {
 3、由于ie6-7不显示content内容，所以要添加标签兼容ie6-7（如：<span>…<span/>）；兼容ie8需要将::after替换成:after。
 
 ```
+### 让图文不可复制
+这点应该大家 都很熟悉了， 某些时候【你懂的】为了快捷搜索答案，可是打死也不让你复制.
+```js
+-webkit-user-select: none; 
+-ms-user-select: none;
+-moz-user-select: none;
+-khtml-user-select: none;
+user-select: none;
+```
+那有些网页为了尊重原创，复制的文本 都会被加上一段来源说明，是如何做到的呢？问的好！ 等的就是你这个问题 -_- 。
+大致思路：
+```js
+1、答案区域监听copy事件，并阻止这个事件的默认行为。
+2、获取选中的内容（window.getSelection()）加上版权信息，然后设置到剪切板（clipboarddata.setData()）。
+```
+### 盒子垂直水平居中
+这个问题好像面试必问的吔！反正我是必问的，哈哈！！！ 其实无关多少种实现思路，只要你能实现就可以！
+
+提供4种方法
+```js
+1、定位 盒子宽高已知， position: absolute; left: 50%; top: 50%; margin-left:-自身一半宽度; margin-top: -自身一半高度;
+
+2、table-cell布局 父级 display: table-cell; vertical-align: middle;  子级 margin: 0 auto;
+
+3、定位 + transform ; 适用于 子盒子 宽高不定时； （这里是本人常用方法）
+    
+    position: relative / absolute;
+    /*top和left偏移各为50%*/
+       top: 50%;
+       left: 50%;
+    /*translate(-50%,-50%) 偏移自身的宽和高的-50%*/
+    transform: translate(-50%, -50%); 注意这里启动了3D硬件加速哦 会增加耗电量的 （至于何是3D加速 请看浏览器进程与线程篇）
+
+4、flex 布局
+    父级： 
+        /*flex 布局*/
+        display: flex;
+        /*实现垂直居中*/
+        align-items: center;
+        /*实现水平居中*/
+        justify-content: center;
+
+再加一种水平方向上居中 ：margin-left : 50% ; transform: translateX(-50%);
+```
+### 改变placeholder的字体颜色大小
+其实这个方法也就在PC端可以，真机上屁用都没有，当时我就哭了。 但 还是贴出来吧
+```js
+input::-webkit-input-placeholder { 
+    /* WebKit browsers */ 
+    font-size:14px;
+    color: #333;
+} 
+input::-moz-placeholder { 
+    /* Mozilla Firefox 19+ */ 
+    font-size:14px;
+    color: #333;
+} 
+input:-ms-input-placeholder { 
+    /* Internet Explorer 10+ */ 
+    font-size:14px;
+    color: #333;
+}
+```
