@@ -497,6 +497,29 @@ em 和 strong 是表达要素(phrase elements)。
     //1.audio元素的autoplay属性在IOS及Android上无法使用，在PC端正常；
     //2.audio元素没有设置controls时，在IOS及Android会占据空间大小，而在PC端Chrome是不会占据任何空间；
     //3.注意不要遗漏微信的兼容处理需要引用微信JS；
-
-
 ```
+### 获取页面元素位置与宽高？
+- element.clientWidth = content + padding
+- element.clientHeight = content + padding
+- element.getBoundingClientRect() 返回值情况
+
+  - left:包围盒左边 border 以外的边缘距页面左边的距离
+
+  - right:包围盒右边 border 以外的边缘距页面左边的距离
+
+  - top:包围盒上边 border 以外的边缘距页面顶部的距离
+
+  - bottom:包围盒下边 border 以外的便于距页面顶部的距离
+
+  - width: content + padding + border
+
+  - height: content + padding + border
+
+注意，设置外边距时外边距合并的情况.
+### requestAnimationFrame 原理？是同步还是异步？
+异步，传入的函数在重绘之前调用
+详细参考：
+
+- [伯乐在线](http://web.jobbole.com/91578/)
+- [码云](https://my.oschina.net/bghead/blog/850692)
+- [鑫空间](http://www.zhangxinxu.com/wordpress/2013/09/css3-animation-requestanimationframe-tween-%E5%8A%A8%E7%94%BB%E7%AE%97%E6%B3%95/)
