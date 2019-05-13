@@ -734,6 +734,382 @@ if (typeof Function.prototype.bind === "undefined"){
     func();
 
 ```
+### 字符串repeat实现
+```js
+// 原生repeat
+'ni'.repeat(3); // 'ninini'
+
+// 实现一
+String.prototype.repeatString1 = function (n) {
+  return Array(n + 1).join(this);
+}
+console.log('ni'.repeatString1(3));
+
+// 实现二
+String.prototype.repeatString2 = function (n) {
+  return Array(n).fill(this).join('');
+}
+console.log('ni'.repeatString2(3));
+```
+### 当我们 new 一个类的时候 都发生了什么
+```js
+/**
+ * new2 new关键字的代码实现演示
+ * @param {function} func 被new的类 (构造函数)
+ */
+function new2(func) {
+    // 创建了一个实例对象 o，并且这个对象__proto__指向func这个类的原型对象 
+    let o = Object.create(func.prototype); 
+    // (在构造函数中this指向当前实例)让这个类作为普通函数值行 并且里面this为实例对象 
+    let k = func.call(o);
+    // 最后再将实例对象返回 如果你在类中显示指定返回值k，
+    // 注意如果返回的是引用类型则将默认返回的实例对象o替代掉
+    return typeof k === 'object' ? k : o;
+}
+
+// 实验
+function M() { // 即将被new的类
+    this.name = 'liwenli';
+}
+
+let m = new2(M); // 等价于 new M 这里只是模拟
+console.log(m instanceof M); // instanceof 检测实例  true
+console.log(m instanceof Object);  // true
+console.log(m.__proto__.constructor === M); //true
+```
+### this/bind
+```js
+let obj = { a: 1};
+  function fn() {
+    this.b = 100;
+    return this.a;
+  }
+  let fe = fn.bind(obj);
+  console.log(fe()); // 1  里面this是obj
+  console.log(obj); // { a: 1, b: 100 }
+  console.log(new fe()); // 里面this是当前创建实例对象 { b: 100 }
+```
+### Object.create 兼容实现
+```js
+        let obj1 = {id: 1};
+        Object._create = (o) => {
+            let Fn = function() {}; // 临时的构造函数
+            Fn.prototype = o;
+            return new Fn;
+        }
+        
+        let obj2 = Object._create(obj1);
+        console.log(obj2.__proto__ === obj1); // true
+        console.log(obj2.id); // 1
+
+        // 原生的Object.create
+        let obj3 = Object.create(obj1);
+        console.log(obj3.__proto__ === obj1); // true
+        console.log(obj3.id); // 1
+```
+### 一道面试题
+
+<img :src="$withBase('/images/mianshiti1.jpg')">
+
+- 解法一
+```js
+function CodingMan(name) { // 主要考察的是 面向对象以及JS运行机制（同步 异步 任务队列 事件循环）
+	function Man(name) {
+		setTimeout(() => { // 异步
+			console.log(`Hi! This is ${name}`);
+		}, 0);
+	}
+
+	Man.prototype.sleep = function(time) {
+		let curTime = new Date();
+		let delay = time * 1000;
+		setTimeout(() => { // 异步
+			while (new Date() - curTime < delay) {} // 阻塞当前主线程
+			console.log(`Wake up after ${time}`);
+		}, 0);
+		return this;
+	}
+
+	Man.prototype.sleepFirst = function(time) {
+		let curTime = new Date();
+		let delay = time * 1000;
+		while (new Date() - curTime < delay) {} // 阻塞当前主线程
+		console.log(`Wake up after ${time}`);
+		return this;
+	}
+
+	Man.prototype.eat = function(food) {
+		setTimeout(() => { // 异步
+			console.log(`Eat ${food}~~`);
+		}, 0)
+		return this;
+	}
+
+	return new Man(name);
+}
+
+// CodingMan('Peter');
+// CodingMan('Peter').sleep(3).eat('dinner');
+// CodingMan('Peter').eat('dinner').eat('supper');
+// CodingMan('Peter').sleepFirst(5).eat('supper');
+```
+- 解法二
+```js
+    function CodingMan(name) {
+        function fe() {
+            fe.flag = true;
+            console.log(`Hi! This is ${name}`);
+        }
+        fe.flag = false;
+        fe.timer = setTimeout(() => {
+            clearTimeout(fe.timer);
+            if (!fe.flag) fe();
+        }, 0);
+        return fe;
+    }
+
+    Function.prototype.sleep = function (delay) {
+        this()
+        this.await(delay);
+        return this;
+    }
+
+    Function.prototype.sleepFirst = function (delay) {
+        this.await(delay);
+        this();
+        return this;
+    }
+
+    Function.prototype.eat = function (dinner) {
+        setTimeout(() => {
+            console.log(`Eat ${dinner}~`);
+        });
+        return this;
+    };
+
+    Function.prototype.await = function (delay) {
+        delay = isNaN(delay) ? 0 : delay;
+        let startTime = new Date();
+        let delayTime = delay * 1000;
+        while (new Date() - startTime <= delayTime) {
+        }
+        console.log(`Wake up after ${delayTime}ms`);
+    }
+     // CodingMan('peter')
+     // CodingMan('peter').sleep(2).eat('hanbao');
+     // CodingMan('peter').sleepFirst(2).eat('hanbao');
+     CodingMan('peter').eat('haha').eat('hanbao');
+```
+### 函数防抖完全版
+```js
+/**
+ * @desc 函数防抖
+ * @param func 函数
+ * @param wait 延迟执行毫秒数
+ * @param immediate true 表立即执行，false 表非立即执行
+ */
+ 
+function debounce(func,wait,immediate) {
+    var timeout;
+
+    return function () {
+        var context = this;
+        var args = arguments;
+
+        if (timeout) clearTimeout(timeout);
+        if (immediate) {
+            var callNow = !timeout;
+            timeout = setTimeout(function(){
+                timeout = null;
+            }, wait)
+            if (callNow) func.apply(context, args)
+        }
+        else {
+            timeout = setTimeout(function(){
+                func.apply(context, args)
+            }, wait);
+        }
+    }
+}
+```
+### 深度拷贝兼容写法（不包括原型属性）
+```js
+function deepCopy(obj) {
+    if (typeof obj !== 'object') return obj;
+    if (typeof window !== 'undefined' && window.JSON) { // 浏览器环境下 并支持window.JSON 则使用 JSON
+        return JSON.parse(JSON.stringify(obj));
+    } else {
+        let newObj = obj.constructor === Array ? [] : {};
+        for(let key in obj) {
+            newObj[key] = typeof obj[key] === 'object' ? deepCopy(obj[key]) : obj[key];
+        }
+        return newObj;
+    }
+}
+
+let obj = {a: 1, b: [12]};
+let newObj = deepCopy(obj);
+newObj.b[1] = 100;
+console.log(obj);
+console.log(newObj);
+```
+### 深度克隆加强版
+```js
+function cloneDeep(obj) {
+  let type = isType(obj)
+  if (type === 'Array' || type === 'Object') {
+    return cloneObj(obj)
+  } else if (type === 'Date') {
+    return obj.constructor(obj)
+  } else {
+    return obj
+  }
+}
+
+function cloneObj(obj) {
+  let newObj = obj instanceof Array ? [] : {};
+  for (let key in obj) {
+    newObj[key] = typeof obj[key] === 'object' ? cloneObj(obj[key]) : obj[key]
+  }
+  return newObj;
+}
+
+function isType(o) {
+  return /\[object\s(.*?)\]/.exec(Object.prototype.toString.call(o))[1]
+}
+
+let fn = function () {
+  return 123
+}
+var a = [[1, 2, 3], [4, 5, 6, 7, fn]];
+// let c = new Date();
+// var b = cloneDeep(c);
+var b = cloneDeep(a);
+console.log(b[0], a[0]);
+console.log(b[0] === a[0]);
+```
+### 原生数据类型检测简易封装
+```js
+Object.prototype.isType = function (type) {
+  return function (params) {
+    return Object.prototype.toString.call(params) === `[object ${type}]`
+  }
+}
+
+let isString = Object.isType('String')
+let isArray = Object.isType('Array')
+
+console.log(isString(1)) // false
+console.log(isString('hello')) // true
+
+console.log(isArray(2)) // false
+console.log(isArray(['hello'])) // true
+```
+### Array的reduce实现
+```js
+Array.prototype._reduce = function (callback, initVal) {
+  let i = 0
+  let result = initVal
+  if (typeof initVal === 'undefined') {
+    result = this[0]
+    i++
+  }
+
+  for (i; i < this.length; i++) {
+    result = callback(result, this[i])
+  }
+  return result
+}
+
+const arr = [1, 2, 3]
+let result = arr._reduce((a, b) => {
+  return a + b
+}, 0)
+console.log(result) // 6
+```
+### Function的bind实现
+```js
+1.es5
+    Function.prototype._bind = function(context) {
+      let func = this;
+      let params = [].slice.call(arguments, 1);
+      let Fnop = function() {};
+      let fbound = function() {
+        params = params.concat([].slice.call(arguments, 0));
+        return func.apply(this instanceof Fnop ?
+          this : context, params);
+      }
+      Fnop.prototype = this.prototype;
+      fbound.prototype = new Fnop();
+      return fbound;
+    }
+
+    function foo() {
+      this.b = 100;
+      return this.a;
+    }
+    let fe = foo._bind({ a: 1 });
+    console.log(fe()); // 1
+    console.log(new fe()); // 实例 {b: 100}
+
+2.es6
+  Function.prototype.mybind = function(context, ...rest) {
+    return (...params) => this.call(context, ...rest, ...params);
+  }
+```
+### 如何主动中止Promise调用链
+```js
+const p1 = new Promise((resolve, reject) => {
+  setTimeout(() => { // 异步操作
+      resolve('start')
+  }, 1000);
+});
+
+p1.then((result) => {
+   console.log('a', result); 
+   return Promise.reject('中断后续调用'); // 此时rejected的状态将直接跳到catch里，剩下的调用不会再继续
+}).then(result => {
+   console.log('b', result);
+}).then(result => {
+   console.log('c', result);
+}).catch(err => {
+   console.log(err);
+});
+
+// a start
+// 中断后续调用
+```
+### 字符串是否符合回文规则
+```js
+let str = 'My age is 0, 0 si ega ym.';
+
+方法一
+function palindrome(params) {
+  params = params.replace(/[\W\s_]/ig, '');
+ return params.toLowerCase()  === params.split('').reverse().join('').toLowerCase();
+}
+console.log(palindrome(str));
+
+方法二
+function palindrome(params) {
+  params = params.replace(/[\W\s_]/ig, '').toLowerCase();
+  for (var i = 0, j = params.length-1; i<j; i++, j--) {
+    if (params[i] !== params[j]) {
+      return false;
+    }
+  }
+  return true;
+}
+```
+### 数组展平
+```js
+let arr = [[1, 2], 3, [[[4], 5]]]; // 数组展平
+function flatten(arr) {
+    return [].concat(
+        ...arr.map(x => Array.isArray(x) ? flatten(x) : x)
+    )
+}
+```
 ### 参考文章
 
 - [fe-interview](https://microzz.com/2017/02/01/fe-interview/)
