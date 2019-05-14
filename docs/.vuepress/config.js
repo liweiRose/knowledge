@@ -116,6 +116,7 @@ module.exports = {
           'app/Interview/Interview-algorithm',
           'app/Interview/Interview-data-structure',
           'app/Interview/interview-summary',
+          'app/Interview/interview-performance'
         ]
       },
       {
