@@ -1110,6 +1110,30 @@ function flatten(arr) {
     )
 }
 ```
+### getElementsByClassName 兼容写法
+```js
+  function getByClass(cName) {
+      if ('getElementsByClassName' in this) {
+          return this.getElementsByClassName(cName);
+      }
+      cName = cName.replace(/(^\s+|\s+$)/g, '').split(/\s+/g);
+      let eles = this.getElementsByTagName('*');
+     for (let i = 0; i < cName.length; i++) {
+        let reg = new RegExp(`(^| )${cName[i]}( |$)`);
+        let temp = [];
+        for (let j = 0; j < eles.length; j++) {
+            let cur = eles[j];
+            let {className} = cur;
+            if (reg.test(className)) {
+                temp.push(cur);
+            }
+        }
+        eles = temp;
+     }
+     return eles;
+  }
+  console.log(content.getByClass('c1 c2 '));
+```
 ### 参考文章
 
 - [fe-interview](https://microzz.com/2017/02/01/fe-interview/)
