@@ -252,3 +252,470 @@ console.log(repeatTimeSort([11, 12, 13, 11, 11, 13]))
 // [ 3, 4, 4, 1, 1, 1, 5, 5, 5, 2, 2, 2, 2 ]
 console.log(repeatTimeSort([1, 2, 1, 2, 1, 3, 4, 5, 4, 5, 5, 2, 2]))
 ```
+### 不用循环，创建一个长度为 100 的数组，并且每个元素的值等于它的下标。
+```js
+// 方法一 递归写法
+function createArray(len, arr = []) {
+
+    if (len > 0) {
+        arr[--len] = len;
+        createArray(len, arr);
+    }
+    return arr;
+}
+console.log(createArray(100)); 
+
+// 方法二
+
+// 下面评论中@MaDivH 提供的实现方法 长度为 100 的数组 
+Array(100).fill().map((_,i)=>i+1);
+
+// 方法三
+[...Array(100).keys()]
+```
+### 根据关键词找出 所在对象id
+```js
+var docs = [
+    {
+        id: 1,
+        words: ['hello', "world"]
+    }, {
+        id: 2,
+        words: ['hello', "hihi"]
+    }, {
+        id: 3,
+        words: ['haha', "hello"]
+    }, {
+        id: 4,
+        words: ['world', "nihao"]
+    }
+];
+findDocList(docs, ['hello']) // 文档id1，文档id2，文档id3
+findDocList(docs, ['hello', 'world']) // 文档id1
+function findDocList(docs, word = []) {
+    if (word.constructor !== Array) return;
+    let ids = [];
+    for (let i = 0; i < docs.length; i++) {
+        let {id, words} = docs[i];
+        let flag = word.every((item) => {
+            return words.indexOf(item) > -1;
+        });
+        flag && ids.push(id);
+    }
+    return ids;
+}
+findDocList(docs, ['hello', 'world']);
+```
+### 插入排序
+> 插入排序 从后往前比较 直到碰到比当前项 还要小的前一项时 将这一项插入到前一项的后面
+```js
+function insertSort(arr) {
+  let len = arr.length;
+  let preIndex, current;
+  for (let i = 1; i < len; i++) {
+    preIndex = i - 1;
+    current = arr[i]; // 当前项
+    while (preIndex >= 0 && arr[preIndex] > current) {
+      arr[preIndex + 1] = arr[preIndex]; // 如果前一项大于当前项 则把前一项往后挪一位
+      preIndex-- // 用当前项继续和前面值进行比较
+    }
+    arr[preIndex + 1] = current; // 如果前一项小于当前项则 循环结束 则将当前项放到 前一项的后面
+  }
+  return arr;
+}
+```
+```js
+function insert(arr, i, x) {
+  let prev = i - 1;
+  while(prev >= 0 && arr[prev] > x) {
+    arr[prev + 1] = arr[prev];
+    prev--;
+  }
+  arr[prev + 1] = x;
+}
+
+function insert_sort(arr) {
+  for (let i = 1; i < arr.length; i++) {
+    insert(arr, i, arr[i]);
+  }
+  return arr;
+}
+
+console.log(insert_sort([1, 10, 3, 0]));
+```
+### 选择排序
+> 选择排序 每次拿当前项与后面其他项进行比较 得到最小值的索引位置 然后把最小值和当前项交换位置
+```js
+function selectSort(arr) {
+  let len = arr.length;
+  let temp = null;
+  let minIndex = null;
+  for (let i = 0; i < len - 1; i++) { // 把当前值的索引作为最小值的索引一次去比较
+    minIndex = i; // 假设当前项索引 为最小值索引
+    for (let j = i + 1; j < len; j++) { // 当前项后面向一次比小
+      if (arr[j] < arr[minIndex]) { // 比假设的值还要小 则保留最小值索引
+        minIndex = j; // 找到最小值的索引位置
+      }
+    }
+    // 将当前值和比较出的最小值交换位置
+    if (i !== minIndex) {
+       temp = arr[i]
+       arr[i] = arr[minIndex];
+       arr[minIndex] = temp;
+    }
+  }
+  return arr;
+}
+```
+### 冒泡排序
+> 冒泡排序 相邻两项进行比较 如果当前值大于后一项 则交换位置
+- 冒泡1
+```js
+
+function swap(arr, i, j) {
+  [arr[i], arr[j]] = [arr[j], arr[i]]
+}
+
+function bubleSort(arr) {
+  let length = arr.length;
+  let temp = null;
+  for (let i = 0; i < length - 1; i++) { // 控制轮数
+    let flag = false; // 当前这轮是否交换过标识
+    for (let l = 0; l < length - i - 1; l++) { // 控制每轮比较次数
+      if (arr[l] > arr[l + 1]) {
+        // temp = arr[l];
+        // arr[l] = arr[l + 1];
+        // arr[l + 1] = temp;
+        swap(arr, l, l + 1);
+        flag = true; // 如果发生过交换flag则为true
+      } 
+    }
+    if (!flag) { // 优化  如果从头到尾比较一轮后 flag依然为false说明 已经排好序了 没必要在继续下去
+      temp = null;
+      return arr;
+    }
+  }
+  return arr;
+}
+```
+- 冒泡2
+```js
+function swap(arr, i, j) {
+  [arr[i], arr[j]] = [arr[j], arr[i]]
+}
+
+function bubble_sort(arr) {
+  for (let i = arr.length - 1; i >= 1; i--) {
+    for (let j = 1; j <= i; j++) {
+      arr[j - 1] > arr[j] && swap(arr, j - 1, j)
+    }
+  }
+  return arr;
+}
+
+console.log(bubble_sort([1, 10, 3, 0]));
+```
+### 快速排序（阮一峰版）
+```js
+function quickSort(arr) {
+    if (arr.length <= 1) return arr;
+    let midIndex = Math.floor(arr.length / 2);
+    let midNum = arr.splice(midIndex, 1)[0];
+    let left = [];
+    let right = [];
+    for(let i = 0; i < arr.length; i++) {
+        let cur = arr[i];
+        if (cur <= midNum) {
+            left.push(cur);
+        } else {
+            right.push(cur);
+        }
+    }
+    return quickSort(left).concat(midNum, quickSort(right));
+}
+
+let arr = [2, 4, 12, 9, 22, 10, 18, 6];
+quickSort(arr);
+```
+### 快速排序 第二版
+```js
+let array = [9, 6, 20, 3, 2];
+// let array = [15, 13, 20, 21, 29];
+
+function quickSort(arr, left = 0, right = arr.length - 1) {
+  let len = arr.length;
+  let partitionIndex;
+  // left = typeof left != 'number' ? 0 : left;
+  // right = typeof right != 'number' ? len - 1 : right;
+  if (left < right) {
+    partitionIndex = partition(arr, left, right);
+    quickSort(arr, left, partitionIndex - 1);
+    quickSort(arr, partitionIndex + 1, right);
+  }
+  return arr;
+}
+
+function partition(arr, left, right) {
+  let pivot = left;
+  let index = pivot + 1;
+  for (let i = index; i <= right; i++) {
+    if (arr[i] < arr[pivot]) {
+      swap(arr, i, index);
+      index++;
+    }
+  }
+  swap(arr, pivot, index - 1);
+  return index - 1;
+}
+
+function swap(arr, i, index) {
+  [arr[i], arr[index]] = [arr[index], arr[i]];
+}
+console.log(quickSort(array));
+```
+### 归并排序
+```js
+let array = [5, 13, 20, 3, 2];
+// let array = [15, 13, 20, 21, 29];
+
+function mergeSort(array) {
+  let arr = array.slice(0);
+  let len = arr.length;
+  if (len < 2) {
+    return arr;
+  }
+  let midIndex = Math.floor(len / 2);
+  let left = arr.slice(0, midIndex);
+  let right = arr.slice(midIndex);
+  return merge(mergeSort(left), mergeSort(right));
+}
+
+function merge(left, right) {
+  let result = [];
+  while(left.length && right.length) {
+    result.push(left[0] < right[0] ? left.shift() : right.shift());
+  }
+
+  if (left.length && !right.length) {
+    result = result.concat(left);
+  }
+
+  if (right.length && !left.length) {
+    result = result.concat(right);
+  }
+  return result;
+}
+
+console.log(mergeSort(array));
+```
+### 数组去重几种方法
+```js
+const arr = [1, 2, 1, 2, 3, 4, 2, 1, 3];
+
+// 1 ES6
+let newArr = [...new Set(arr)];
+
+// 2
+const arr = [1, 2, 1, 2, 3, 4, 'l', 2, 1, 3, 'l'];
+const newArr = arr.filter(function(ele, index, array) {
+	return index === array.indexOf(ele)
+});
+console.log(newArr); // [ 1, 2, 3, 4, 'l' ]
+
+// 3
+Array.prototype.unique2 = function() {
+    let newArr = [];
+    let len = this.length;
+    for(let i = 0; i < len; i++) {
+        let cur = this[i];
+        if(newArr.indexOf(cur) === -1) {
+            newArr[newArr.length] = cur;
+        }
+    }
+    return newArr;
+}
+console.log(arr.unique1());
+
+// 4
+Array.prototype.unique3 = function() {
+    let newArr = this.slice(0);
+    let len = this.length;
+    let obj = {};
+    for(let i = 0; i < len; i++) {
+        let cur = newArr[i];
+        if(obj[cur]) {
+            newArr[i] = newArr[newArr.length - 1];
+            newArr.length--;
+            i--;
+            continue;
+        }
+        obj[cur] = cur;
+    }
+    return newArr;
+}
+console.log(arr.unique3());
+
+// 5
+Array.prototype.unique4 = function() {
+    let json = {}, newArr = [], len = this.length;
+    for(var i = 0; i < len; i++) {
+        let cur = this[i];
+        if (typeof json[cur] == "undefined") {
+            json[cur] = true;
+            newArr.push(cur)
+        }
+    }
+    return newArr;
+}
+console.log(arr.unique4());
+```
+### 千分符
+- 方法一
+```js
+// 处理数字
+let str1 = 2123456789;
+let str2 = 2123456789.12;
+console.log(str1.toLocaleString()); // 2,123,456,789
+console.log(str2.toLocaleString()); // 2,123,456,789.12
+```
+- 方法二
+```js
+    // 处理字符串
+    let str1 = '2123456789';
+    let str2 = '2123456789.12';
+
+    // 利用正向预查 匹配 开头一个数字\d 后面匹配这个数字后面必须是三个数字为一组为结尾或小数为结尾
+    function thousandth(str) { 
+        let reg = /\d(?=(?:\d{3})+(?:\.\d+|$))/g; 
+        return str.replace(reg, '$&,');
+    }
+    console.log(thousandth(str1)); // 2,123,456,789
+    console.log(thousandth(str2)); // 2,123,456,789.12
+```
+### 求a的值 什么情况下 满足if (a == 1 & a == 2 & a == 3)这个条件
+```js
+var a = {
+  a: 1,
+  valueOf() {
+    return this.a++
+  }
+}
+
+if (a == 1 & a == 2 & a == 3) {
+  console.log(1)
+}
+```
+### 在一个数组中 如a、b两项, 要保证a和b两项的差 与 a和b两项索引的差 的相加后的结果max 是数组中其他两项max 中的最大值 找出符合条件两项a, b的值 (不可以排序 或改变数组位置) 如：
+let max = (a - b) + (a的索引- b的索引); 求a b
+答案：
+```js
+// 思路：其实也就是找出数组中当前的每一项与自身索引相加后的和的最大值以及与索引相加后的最小值的和 找出符合条件的两项即可 如 let result = (maxItem-minItem) + (maxIndex-minIndex) 等价于 (maxItem+maxIndex) - (minItem+minIndex)
+
+// let arr = [1, 2, 3, 4, 5, 6]; // 最简单的测试数组 最小项1 最大项6
+// 很显然这个数组中最大值6与索引相加(6+5)是当中最大值11 1与索引相加(1+0)为当中的最小值1（6 + 5）-（1+0）= 10
+
+// 假设法
+let arr = [2, 10, 9, 1, 8, 3, 4];
+let minItem = arr[0]; // 假设第一项与自身索引的和是最小值 索引为0因此省略
+let maxItem = arr[0]; // 假设第一项与自身索引的和是最大值 索引为0因此省略
+let min = minItem; // 最小项
+let max = maxItem; // 最大项
+let minIndex = 0; // 最小项索引
+let maxIndex = 0; // 最大项索引
+for(let i = 1; i < arr.length; i++) {
+    let cur = arr[i] + i; // 当前项和自身索引的和
+    cur < minItem ? (minItem = cur, min = arr[i], minIndex = i) : null;
+    cur > maxItem ? (maxItem = cur, max = arr[i], maxIndex = i) : null;
+}
+console.log(maxItem, minItem); // 最大项与索引的和 最小项与索引的和
+console.log(max, min); // 最大项 最小项
+console.log(maxIndex, minIndex); // 最大项的索引 最小项的索引
+```
+### 检测 字符串中括号表达式是否平衡
+```js
+// 如 balance('[()') = false; balance('[()()()]') = true
+// 一
+function match(a, b) {
+	return (a === '(' && b === ')') || (a === ')' && b === '(') || (a === '[' && b === ']') || (a === ']' && b === '[');
+}
+
+function balance(str) {
+	if (str.length % 2 === 0) {
+		let len = str.length;
+		for (let i = 0, j = len - 1; i < len / 2; i++, j--) {
+			if (!match(str[i], str[j])) {
+				return false;
+			}
+		}
+		return true;
+	}
+	return false;
+}
+console.log(balance('[()()()]')); // true
+console.log(balance('[()')); // false
+console.log(balance('[]()')); // false
+// 二
+function is_balance(str) {
+	return [...str].reduce((stack, c) => {
+		match(stack[stack.length - 1], c) ?
+			stack.pop() : stack.push(c);
+		return stack;
+	}, []).length === 0;
+}
+console.log(is_balance('[()()()]')); // true
+console.log(is_balance('[()')); // false
+console.log(is_balance('[]()')); // false
+```
+### 求相邻两项最大和
+```js
+// 一
+let arr1 = [-1, 3, 1, -5, 2]; // 如 [2, 4, -4, -3] => 4
+function sum(arr) {
+    let prev = arr[0];
+    let sumArr = [];
+    let len = arr.length;
+    for(let i = 1; i < len; i++) {
+        let cur = arr[i];
+        sumArr.push(cur + prev);
+        prev = cur;
+    }   
+    return Math.max(...sumArr);
+}
+console.log(sum(arr1));
+
+// 二
+function maxsum(arr) {
+    const M = [arr[0]];
+    let max = M[0];
+    
+    for(let i = 1; i < arr.length; i++) {
+        M[i] = Math.max(arr[i], M[i - 1] + arr[i]);
+        max = Math.max(M[i], max);
+    }
+    return max;
+}
+```
+### 字符串去除相邻的重复项 如：'aabbccddeexxxxaa' => 'abcdexa'
+```js
+// 正则表达式
+let str = 'aabbccddeexxxxaa';
+function uniq1(str) {
+    // return str.replace(/([a-z])(\1){1,}/g, '$1');
+    return str.replace(/(.)(?=\1)/g, '');
+}
+console.log(uniq1(str));
+
+// 数组方式
+function uniq2(str) {
+    let arr = str.split('');
+    let newArr = [arr[0]];
+    for(let i = 1; i < arr.length; i++) {
+        let cur = arr[i];
+        if (cur !== newArr[newArr.length - 1]) {
+            newArr.push(cur);
+        }
+    }
+    return newArr.join('');
+}
+console.log(uniq2(str));
+```
