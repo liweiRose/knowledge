@@ -362,3 +362,31 @@ input:-ms-input-placeholder {
     color: #333;
 }
 ```
+### flex 布局 与 grid 布局
+这个问题比较简单，用 flex 与 grid 实现如下即可：
+<img :src="$withBase('/images/cssflex.png')">
+实现方式如下：
+```js
+      /* flex */
+     .box {
+       display: flex;
+       flex-wrap: wrap;
+       width: 100%;
+     }
+     .box div {
+        width: calc(100% / 3 - 2px);
+        height: 100px;
+        border: 1px solid black;
+     }
+     /* grid */
+     .box {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        width: 100%;
+     }
+
+     .box div {
+        height: 100px;
+        border: 1px solid black;
+     }
+```
