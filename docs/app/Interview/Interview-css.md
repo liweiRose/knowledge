@@ -390,3 +390,72 @@ input:-ms-input-placeholder {
         border: 1px solid black;
      }
 ```
+### 使用css实现一个持续的动画效果
+```js
+animation:mymove 5s infinite;
+@keyframes mymove {
+from {top:0px;}
+to {top:200px;}
+}
+```
+主要考：`animation` 用法
+- animation-name  规定需要绑定到选择器的 keyframe 名称。
+
+
+- animation-duration  规定完成动画所花费的时间，以秒或毫秒计。
+
+
+- animation-timing-function  规定动画的速度曲线。
+
+
+- animation-delay  规定在动画开始之前的延迟。
+
+
+- animation-iteration-count  规定动画应该播放的次数。
+
+
+- animation-direction  规定是否应该轮流反向播放动画。
+### 右边宽度固定，左边自适应
+- 第一种：
+```html
+<style>
+body{
+    display: flex;
+}
+.left{
+    background-color: rebeccapurple;
+    height: 200px;
+    flex: 1;
+}
+.right{
+    background-color: red;
+    height: 200px;
+    width: 100px;
+}
+</style>
+<body>
+    <div class="left"></div>
+    <div class="right"></div>
+</body>
+```
+- 第二种
+```html
+<style>
+    div {
+        height: 200px;
+    }
+    .left {
+        float: right;
+        width: 200px;
+        background-color: rebeccapurple;
+    }
+    .right {
+        margin-right: 200px;
+        background-color: red;
+    }
+</style>
+<body>
+    <div class="left"></div>
+    <div class="right"></div>
+</body>
+```
