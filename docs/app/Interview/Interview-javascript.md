@@ -1134,6 +1134,50 @@ function flatten(arr) {
   }
   console.log(content.getByClass('c1 c2 '));
 ```
+### 使用js实现一个持续的动画效果
+最开始的思路是用定时器实现，最后没有想的太完整，面试官给出的答案是用`requestAnimationFrame`。
+- 定时器思路
+```js
+var e = document.getElementById('e')
+var flag = true;
+var left = 0;
+setInterval(() => {
+    left == 0 ? flag = true : left == 100 ? flag = false : ''
+    flag ? e.style.left = ` ${left++}px` : e.style.left = ` ${left--}px`
+}, 1000 / 60)
+```
+- `requestAnimationFrame` 由于之前没有用过这个 `API` 所以是现学的。
+```js
+//兼容性处理
+window.requestAnimFrame = (function(){
+  return  window.requestAnimationFrame       ||
+          window.webkitRequestAnimationFrame ||
+          window.mozRequestAnimationFrame    ||
+          function(callback){
+            window.setTimeout(callback, 1000 / 60);
+          };
+})();
+
+var e = document.getElementById("e");
+var flag = true;
+var left = 0;
+
+function render() {
+    left == 0 ? flag = true : left == 100 ? flag = false : '';
+    flag ? e.style.left = ` ${left++}px` :
+        e.style.left = ` ${left--}px`;
+}
+
+(function animloop() {
+    render();
+    requestAnimFrame(animloop);
+})();
+```
+- 浏览器可以优化并行的动画动作，更合理的重新排列动作序列，并把能够合并的动作放在一个渲染周期内完成，从而呈现出更流畅的动画效果
+- 解决毫秒的不精确性
+- 避免过度渲染（渲染频率太高、tab 不可见暂停等等）
+
+注：requestAnimFrame 和 定时器一样也头一个类似的清除方法 cancelAnimationFrame。
 ### 参考文章
 
 - [fe-interview](https://microzz.com/2017/02/01/fe-interview/)
