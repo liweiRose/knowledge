@@ -459,3 +459,77 @@ body{
     <div class="right"></div>
 </body>
 ```
+### 水平垂直居中
+- 第一种
+```js
+#container{
+    position:relative;
+}
+#center{
+    width:100px;
+    height:100px;
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%);
+}
+```
+- 第二种
+```js
+#container{
+    position:relative;
+}
+
+#center{
+    width:100px;
+    height:100px;
+    position:absolute;
+    top:50%;
+    left:50%;
+    margin:-50px 0 0 -50px;
+}
+```
+- 第三种
+```js
+#container{
+    position:relative;
+}
+
+#center{
+    position:absolute;
+    margin:auto;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+}
+```
+- 第四种 flex
+```js
+#container{
+    display:flex;
+    justify-content:center;
+    align-items: center;
+}
+```
+### 封装一个函数，参数是定时器的时间，.then执行回调函数。
+```js
+function sleep (time) {
+  return new Promise((resolve) => setTimeout(resolve, time));
+}
+```
+### 一个关于 this 指向的问题
+```js
+obj = {
+    name: 'a',
+    getName : function () {
+        console.log(this.name);
+    }
+}
+
+var fn = obj.getName
+obj.getName()
+var fn2 = obj.getName()
+fn()
+fn2()
+```
