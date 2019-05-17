@@ -21,3 +21,21 @@ dom渲染完成时间： domContentLoadedEventEnd - navigationStart
 页面onload时间： loadEventEnd - navigationStart
 ```
 如果不使用该API，可以以服务器渲染返回的时间，或是SPA路由跳转离开的时间为起点，domContentLoaded，load等事件为结束点进行记录。或是直接上google analytics。方法很多，就不细说了。
+### 项目做过哪些性能优化？
+- 减少 HTTP 请求数
+- 减少 DNS 查询
+- 使用 CDN
+- 避免重定向
+- 图片懒加载
+- 减少 DOM 元素数量
+- 减少 DOM 操作
+- 使用外部 JavaScript 和 CSS
+- 压缩 JavaScript 、 CSS 、字体、图片等
+- 优化 CSS Sprite
+- 使用 iconfont
+- 字体裁剪
+- 多域名分发划分内容到不同域名
+- 尽量减少 iframe 使用
+- 避免图片 src 为空
+- 把样式表放在  中
+- 把脚本放在页面底部
