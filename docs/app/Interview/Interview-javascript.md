@@ -1178,6 +1178,48 @@ function render() {
 - 避免过度渲染（渲染频率太高、tab 不可见暂停等等）
 
 注：requestAnimFrame 和 定时器一样也头一个类似的清除方法 cancelAnimationFrame。
+### CommonJS 中的 require/exports 和 ES6 中的 import/export 区别？
+- commonJS 模块的重要特性是加载时执行，即脚本代码在 require 的时候，就会全部执行。一旦出现某个模块被”循环加载”，就只输出已经执行的部分，还未执行的部分不会输出。
+- ES6 模块是动态引用，如果使用 import 从一个模块加载变量，那些变量不会被缓存，而是成为一个指向被加载模块的引用，需要开发者自己保证，真正取值的时候能够取到值。
+- import/export 最终都是编译为 require/exports 来执行的。
+- CommonJS 规范规定，每个模块内部，module 变量代表当前模块。这个变量是一个对象，它的 exports 属性（即 module.exports ）是对外的接口。加载某个模块，其实是加载该模块的 module.exports 属性。
+- export 命令规定的是对外的接口，必须与模块内部的变量建立一一对应关系。
+### 一行代码实现数组去重？
+```js
+[...new Set([1,2,3,1,'a',1,'a'])]
+```
+### 使用addEventListener点击li弹出内容，并且动态添加li之后有效
+```js
+var ulNode = document.getElementById("ul");
+    ulNode.addEventListener('click', function (e) {
+        if (e.target && e.target.nodeName.toUpperCase() == "LI") {
+            alert(e.target.innerHTML);
+        }
+    }, false);
+```
+### 怎么判断两个对象相等？
+```js
+obj={
+    a:1,
+    b:2
+}
+obj2={
+    a:1,
+    b:2
+}
+obj3={
+    a:1,
+    b:'2'
+}
+```
+最开始的思路是遍历来判断，但是最后好像没有说清楚，查了下，好像可以转换为字符串来判断。
+```js
+JSON.stringify(obj)==JSON.stringify(obj2);//true
+JSON.stringify(obj)==JSON.stringify(obj3);//false
+```
+### Set 和 Map 数据结构
+- ES6 提供了新的数据结构 Set 它类似于数组，但是成员的值都是唯一的，没有重复的值。
+- ES6 提供了 Map 数据结构。它类似于对象，也是键值对的集合，但是“键”的范围不限于字符串，各种类型的值（包括对象）都可以当作键。也就是说，Object 结构提供了“字符串—值”的对应，Map 结构提供了“值—值”的对应，是一种更完善的 Hash 结构实现。
 ### 参考文章
 
 - [fe-interview](https://microzz.com/2017/02/01/fe-interview/)
