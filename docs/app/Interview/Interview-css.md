@@ -543,3 +543,72 @@ fn2()
 - 移动或者给页面中的 DOM 节点添加动画
 - 添加一个样式表，调整样式属性
 - 用户行为，例如调整窗口大小，改变字号，或者滚动。
+### 高度已知，三栏布局，左右宽度300，中间自适应
+```css
+/* 浮动布局 */
+  .layout.float .left{
+    float:left;
+    width:300px;
+    background: red;
+  }
+  .layout.float .center{
+    background: yellow;
+  }
+  .layout.float .right{
+    float:right;
+    width:300px;
+    background: blue;
+  }
+ /* 决定定位布局 */
+ .layout.absolute .left-center-right>div{
+  position: absolute;
+ }
+.layout.absolute .left{
+  left:0;
+  width: 300px;
+  background: red;
+}
+.layout.absolute .center{
+  left: 300px;
+  right: 300px;
+  background: yellow;
+}
+.layout.absolute .right{
+  right:0;
+  width: 300px;
+  background: blue;
+}
+ /* flex布局 */
+  .layout.flexbox{
+      margin-top: 110px;
+    }
+    .layout.flexbox .left-center-right{
+      display: flex;
+    }
+    .layout.flexbox .left{
+      width: 300px;
+      background: red;
+    }
+    .layout.flexbox .center{
+      flex:1;
+      background: yellow;
+    }
+    .layout.flexbox .right{
+      width: 300px;
+      background: blue;
+    }
+```
+### 如何实现一个最大的正方形
+```css
+ section {
+    width:100%;
+    padding-bottom: 100%;
+    background: #333;
+}
+```
+### css 的解析顺序
+> css 选择器匹配元素是逆向解析
+- 因为所有样式规则可能数量很大，而且绝大多数不会匹配到当前的 DOM 元素（因为数量很大所以一般会建立规则索引树），所以有一个快速的方法来判断「这个 selector 不匹配当前元素」就是极其重要的。
+- 如果正向解析，例如「div div p em」，我们首先就要检查当前元素到 html 的整条路径，找到最上层的 div，再往下找，如果遇到不匹配就必须回到最上层那个 div，往下再去匹配选择器中的第一个 div，回溯若干次才能确定匹配与否，效率很低。
+- 逆向匹配则不同，如果当前的 DOM 元素是 div，而不是 selector 最后的 em，那只要一步就能排除。只有在匹配时，才会不断向上找父节点进行验证。
+> 所以为了减少查找时间，尽量不要直接使用标签选择器。
