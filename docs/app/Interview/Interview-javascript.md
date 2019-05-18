@@ -1220,6 +1220,45 @@ JSON.stringify(obj)==JSON.stringify(obj3);//false
 ### Set 和 Map 数据结构
 - ES6 提供了新的数据结构 Set 它类似于数组，但是成员的值都是唯一的，没有重复的值。
 - ES6 提供了 Map 数据结构。它类似于对象，也是键值对的集合，但是“键”的范围不限于字符串，各种类型的值（包括对象）都可以当作键。也就是说，Object 结构提供了“字符串—值”的对应，Map 结构提供了“值—值”的对应，是一种更完善的 Hash 结构实现。
+### 不借助第三者交换 a，b两个值。
+```js
+/* 方法一 */
+a = a + b;
+b = a - b;
+a = a - b;
+
+/* 方法二 */
+a = a - b;
+b = a + b;
+a = b - a;
+
+/* 方法三 */
+a = {a:b,b:a};
+b = a.b;
+a = a.a;
+
+/* 方法四 */
+a = [a,b];
+b = a[0];
+a = a[1];
+
+/* 方法五 */
+[a,b] = [b,a];
+```
+### new 的过程和实现
+```js
+/* 选自 yck 文章 */
+function create(Con, ...args) {
+  let obj = {}
+  Object.setPrototypeOf(obj, Con.prototype)
+  let result = Con.apply(obj, args)
+  return result instanceof Object ? result : obj
+}
+```
+如果你能清楚的了解上边代码的原理，请忽略。
+
+不然的话建议阅读下边大佬的文章。
+推荐 yck 的文章 [重学 JS 系列：聊聊 new 操作符](https://juejin.im/post/5c7b963ae51d453eb173896e)
 ### 参考文章
 
 - [fe-interview](https://microzz.com/2017/02/01/fe-interview/)
