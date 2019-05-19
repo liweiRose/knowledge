@@ -100,3 +100,11 @@ ViewModel：它是View的抽象，负责View与Model之间信息转换，将View
 
 Model：数据访问层
 ```
+### react的自定义事件和原生事件的区别
+React 并不是将 click 事件绑在该 div 的真实 DOM 上，而是在 document 处监听所有支持的事件，当事件发生并冒泡至 document 处时，React 将事件内容封装并交由真正的处理函数运行。
+### setState是异步还是同步的
+不要着急回答是异步的，再上问的基础上 setState 也可以是同步的。
+
+setState 只在合成事件和钩子函数中是“异步”的，在原生事件和 setTimeout 中都是同步的。
+
+详情请阅读 饿了么-虹晨大佬的文章 [你真的理解setState吗？](https://juejin.im/post/5b45c57c51882519790c7441)
