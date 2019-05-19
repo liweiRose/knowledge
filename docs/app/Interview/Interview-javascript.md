@@ -1259,6 +1259,8 @@ function create(Con, ...args) {
 
 不然的话建议阅读下边大佬的文章。
 推荐 yck 的文章 [重学 JS 系列：聊聊 new 操作符](https://juejin.im/post/5c7b963ae51d453eb173896e)
+### 继承优缺点
+
 ### 参考文章
 
 - [fe-interview](https://microzz.com/2017/02/01/fe-interview/)
