@@ -612,3 +612,84 @@ fn2()
 - 如果正向解析，例如「div div p em」，我们首先就要检查当前元素到 html 的整条路径，找到最上层的 div，再往下找，如果遇到不匹配就必须回到最上层那个 div，往下再去匹配选择器中的第一个 div，回溯若干次才能确定匹配与否，效率很低。
 - 逆向匹配则不同，如果当前的 DOM 元素是 div，而不是 selector 最后的 em，那只要一步就能排除。只有在匹配时，才会不断向上找父节点进行验证。
 > 所以为了减少查找时间，尽量不要直接使用标签选择器。
+### CSS 有哪些样式可以给子元素继承!
+- 可继承的:font-size,font-weight,line-height,color,cursor等
+- 不可继承的一般是会改变盒子模型的:display,margin、border、padding、height等
+### 行内元素有哪些？块级元素有哪些？ 空(void)元素有那些？
+- 行内: input,span,a,img以及display:inline的元素
+- 块级: p,div,header,footer,aside,article,ul以及display:block这些
+- void: br,hr
+### CSS3实现一个扇形
+```css
+.sector {
+      width: 0;
+      height: 0;
+      border-width: 50px;
+      border-style: solid;
+      border-color: #f00 transparent transparent;
+      border-radius: 50px;
+    }
+```
+### box-sizing常用的属性有哪些? 分别有啥作用?
+box-sizing有两个值:`content-box`(W3C标准盒模型),`border-box`(怪异模型),
+
+content-box的计算公式会把宽高的定义指向 content,border和 padding 另外计算,
+也就是说 content + padding + border = 120px(盒子实际大小)
+
+而border-box的计算公式是总的大小涵盖这三者, content 会缩小,来让给另外两者
+content(80px) + padding(5*2px) + border(5*2px) = 100px
+### 清除浮动的方式有哪些?比较好的是哪一种?
+常用的一般为三种.clearfix, clear:both,overflow:hidden;
+比较好是 .clearfix,伪元素万金油版本...后两者有局限性
+```css
+    .clearfix:after {
+      visibility: hidden;
+      display: block;
+      font-size: 0;
+      content: " ";
+      clear: both;
+      height: 0;
+    }
+    
+    
+<!--
+为毛没有 zoom ,_height 这些...IE6,7这类需要 csshack 不再我们考虑之内了
+.clearfix 还有另外一种写法...
+-->
+
+.clearfix:before, .clearfix:after {
+	content:"";
+	display:table;
+}
+.clearfix:after{
+	clear:both;
+	overflow:hidden;
+}
+.clearfix{
+    zoom:1;
+}
+
+<!--
+用display:table 是为了避免外边距margin重叠导致的margin塌陷,
+内部元素默认会成为 table-cell 单元格的形式
+-->
+```
+`clear:both:`若是用在同一个容器内相邻元素上,那是贼好的...有时候在容器外就有些问题了, 比如相邻容器的包裹层元素塌陷
+
+`overflow:hidden`:这种若是用在同个容器内,可以形成 `BFC`避免浮动造成的元素塌陷
+### CSS 中transition和animate有何区别? animate 如何停留在最后一帧!
+transition一般用来做过渡的, 没时间轴的概念, 通过事件触发(一次),没中间状态(只有开始和结束).
+
+而animate则是做动效,有时间轴的概念(帧可控),可以重复触发和有中间状态;
+
+过渡的开销比动效小,前者一般用于交互居多,后者用于活动页居多;
+
+至于如何让animate停留在最后一帧也好办,就它自身参数的一个值就可以了.
+```css
+animation-fill-mode: forwards;  
+<!--backwards则停留在首帧,both是轮流-->
+```
+### 说说样式权重的优先级;
+`!important` > 行内样式 > `id `> `class` > `tag`
+
+样式权重可以叠加, 比如 `id>class`
