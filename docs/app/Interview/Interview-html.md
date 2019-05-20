@@ -523,3 +523,8 @@ em 和 strong 是表达要素(phrase elements)。
 - [伯乐在线](http://web.jobbole.com/91578/)
 - [码云](https://my.oschina.net/bghead/blog/850692)
 - [鑫空间](http://www.zhangxinxu.com/wordpress/2013/09/css3-animation-requestanimationframe-tween-%E5%8A%A8%E7%94%BB%E7%AE%97%E6%B3%95/)
+
+### 对HTML语义化的理解
+简言之:就是不滥用标签(比如 DIV)/随意嵌套(比如 span>div) ,
+
+类的命名要合理, 利于浏览器解析乃至引擎收录,也利于团队协作和维护
