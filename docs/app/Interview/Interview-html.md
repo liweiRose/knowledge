@@ -528,3 +528,34 @@ em 和 strong 是表达要素(phrase elements)。
 简言之:就是不滥用标签(比如 DIV)/随意嵌套(比如 span>div) ,
 
 类的命名要合理, 利于浏览器解析乃至引擎收录,也利于团队协作和维护
+### 给一个 DOM添加捕获和冒泡的两种写法的事件点击,谁先执行?
+分情况分析:
+
+- 有拿到节点的,优先捕获,没有才往上冒泡寻找
+- 若是通过node.addEventListener('event',callback,bubble or capture); 谁先调用谁先执行
+### 谈谈你对ajax 的理解,以及用原生 JS 实现有哪些要点需要注意;
+`ajax`全称是异步 `javascript` 和 `XML`,用来和服务端进行数据交互的,让无刷新替换页面数据成了可能;
+
+至于有哪些要要点,来一个简短的`ajax`请求
+```js
+
+var xhr = new XMLHttpRequest(); // 声明一个请求对象
+
+
+xhr.onreadystatechange = function(){
+    if(xhr.readyState === 4){  // readyState 4 代表已向服务器发送请求
+        if(xhr.status === OK){ // // status 200 代表服务器返回成功
+            console.log(xhr.responseText); // 这是返回的文本
+        } else{
+            console.log("Error: "+ xhr.status); // 连接失败的时候抛出错误
+        }
+    }
+}
+
+xhr.open('GET', 'xxxx');
+
+// 如何设置请求头? xhr.setRequestHeader(header, value);
+xhr.setRequestHeader('Content-Type', 'application/json');
+
+xhr.send(null); // get方法 send null(亦或者不传,则直接是传递 header) ,post 的 send 则是传递值
+```
