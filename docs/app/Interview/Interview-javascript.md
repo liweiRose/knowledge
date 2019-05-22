@@ -1317,7 +1317,485 @@ let tempArr = [1,2,3,4,5,'6',7,'8','a','b','z'].sort(function(){
 // 因为里面有随机数,所以答案没有标准答案,我这边跑了一次是输出这个
 //["6", "z", 3, "b", 5, 2, 7, "8", "a", 1, 4]
 ```
+### 求[1, 10, 11, -1,'-5',12, 13, 14, 15, 2, 3, 4, 7, 8, 9]内最大值与最小值之差
+```js
 
+// 来一个很粗糙的版本,只当传入是数组且可以隐性转为数字的
+function MaxMinPlus(arr) {
+  // 返回最大值与最小值之差
+  return Array.isArray(arr) ? Math.max.apply(Math, arr) - Math.min.apply(Math, arr) : console.log('传入的不是数组亦或者未能解决的错误')
+}
+
+// 结果是 20
+
+// 若是要完善的话,要考虑传入的是非数组,
+//传入字符串的时候要判断,然后切割为数组..
+// 都要考虑进去代码量不短
+```
+### 请给Array实现一个方法,去重后返回重复的字符(新数组)
+```js
+
+  var testArr = [1,6,8,3,7,9,2,7,2,4,4,3,3,1,5,3];
+    
+  Array.prototype.extraChar = function(){
+      var cacheExtraChar = []; // 缓存重复出现的字符
+      var that = this; // 缓存 this;
+      this.map(function(item,index){
+          // 怎么理解这段代码呢?
+          // 就是向前往后查找一遍和从后往前查找一遍,不等就是没有重复
+          // 为什么还要判断一遍缓存,是过滤缓存数组内多次写入
+          (that.indexOf(item) !== that.lastIndexOf(item)) && cacheExtraChar.indexOf(item) === -1 ? cacheExtraChar.push(item) : -1;
+      });
+      return cacheExtraChar;
+  }
+
+
+testArr.extraChar(); // [1, 3, 7, 2, 4]
+
+// 若是还需要排序就再排序下
+
+[1,6,8,3,7,9,2,7,2,4,4,3,3,1,5,3]
+.extraChar()
+.sort(function(a,b){return a-b}) // [1, 2, 3, 4, 7]
+```
+### 一个数组中 par中存放了多个人员的信息,每个人员的信息由 name 和 age 构成({name:'张三',age:15}).请用 JS 实现年龄从小到大的排序;
+```js
+var par = [{age:5,name:'张三'},{age:3,name:'李四'},{age:15,name:'王五'},{age:1,name:'随便'}]
+
+var parSort = par.sort(function(a,b){
+    return a.age - b.age;
+})
+```
+### 判断一个回文字符串和同字母异序字符串
+- 回文字符串就是正序倒序都是一样的;
+- 同字母异序字符串则是字符串都一样,但是位置可能不一定一样,比如abcefd和dceabf=>return true
+后者的思路就是用排序把异序扭正.
+```js
+
+// 回文判断 , 比如用 abcba
+var isPalindromes = function(params){
+  params = params.toString().toLowerCase()
+  return params === params.split('').reverse().join('');
+}
+
+// 同字母异序判定,比如`abcefd`和`dceabf`
+var isAnagram = function(str1, str2)  {
+  str1 = str1.toString().toLowerCase();
+  str2 = str2.toString().toLowerCase();
+  return str1.split('').sort().join('') === str2.split('').sort().join('')
+}
+```
+进阶版:多一些特殊字符
+
+若是我们要去除所有非字母数字的字符,则需要用到正则
+```js
+
+// 进阶版: isPalindromes('abc_ &b #@a')
+
+var isPalindromes = function(params){
+  // 传入参数先转为字符串且全部转为小写,最后去除多余字符比较
+  params = params.toString().toLowerCase().replace(/[\W_\s]/g,'');
+  console.log(params)
+  return params === params.split('').reverse().join('');
+}
+
+
+// 进阶版同字母异序: isAnagram('ab *&cef#d','!d@ce^abf')
+var isAnagram = function(str1, str2)  {
+  str1 = str1.toString().toLowerCase().replace(/[\W_\s]/g,'');
+  str2 = str2.toString().toLowerCase().replace(/[\W_\s]/g,'');
+  return str1.split('').sort().join('') === str2.split('').sort().join('')
+}
+```
+### JS 实现String.trim()方法;
+```js
+// 原生是有 trim()方法的.我们要模拟一个;
+
+String.prototype.emuTrim = function(){
+    // 这条正则很好理解,就是把头部尾部多余的空格字符去除
+    return this.replace(/(^\s*)|(\s*$)/g,'');
+}
+
+
+'  fsaf fsdaf f safl lllll    '.emuTrim();  //"fsaf fsdaf f safl lllll" 
+```
+### JS 实现函数运行一秒后打印输出0-9;给定如下代码
+```js
+
+for(let i=0;i<10;i++){
+  setTimeout(function(){
+       console.log(i);
+  },1000);
+}
+```
+### 实现对一个数组或者对象的浅拷贝和"深度"拷贝
+浅拷贝就是把属于源对象的值都复制一遍到新的对象,不会开辟两者独立的内存区域;
+
+深度拷贝则是完完全全两个独立的内存区域,互不干扰
+
+- 浅拷贝
+```js
+
+// 这个 ES5的
+
+function shallowClone(sourceObj) {
+  // 先判断传入的是否为对象类型
+  if (!sourceObj || typeof sourceObj !== 'object') {
+    console.log('您传入的不是对象!!')
+  }
+  // 判断传入的 Obj是类型,然后给予对应的赋值
+  var targetObj = sourceObj.constructor === Array ? [] : {};
+  
+  // 遍历所有 key
+  for (var keys in sourceObj) {
+    // 判断所有属于自身原型链上的 key,而非继承(上游 )那些
+    if (sourceObj.hasOwnProperty(keys)) {
+      // 一一复制过来
+      targetObj[keys] = sourceObj[keys];
+    }
+  }
+  return targetObj;
+}
+
+ // ES6 可以用 Object.assign(targeObj, source1,source2,source3) 来实现对象浅拷贝
+```
+- 深度拷贝
+```js
+
+// 就是把需要赋值的类型转为基本类型(字符串这些)而非引用类型来实现
+// JOSN对象中的stringify可以把一个js对象序列化为一个JSON字符串，parse可以把JSON字符串反序列化为一个js对象
+
+var deepClone = function(sourceObj) {
+  if (!sourceObj || typeof sourceObj !== 'object') {
+    console.log('您传入的不是对象!!');
+    return;
+  }
+  // 转->解析->返回一步到位
+  return window.JSON
+    ? JSON.parse(JSON.stringify(sourceObj))
+    : console.log('您的浏览器不支持 JSON API');
+};
+```
+### this对象的理解
+简言之:谁调用指向谁,运行时的上下文确定,而非定义的时候就确定;
+强行绑定 this的话,可以用 call,apply,bind,箭头函数....来修改this的指向
+这类的文章太多,自行搜索吧....
+
+Q: 看到你说到 bind,能用 JS简单的模拟个么?
+```js
+Function.prototype.emulateBind =  function (context) {
+    var self = this;
+    return function () {
+        return self.apply(context);
+    }
+
+}
+```
+### JS 的作用域是什么?有什么特别之处么?
+作用域就是有它自身的上下文区域(比如函数内),内部会有变量声明提升,函数声明提升这些;
+
+函数声明提升优于变量声明提升..
+
+作用域有全局作用域和块级作用域(局部,比如用 let 或者单纯花括号的);
+
+作用域会影响this的指向
+### 怎么解决跨域问题,有哪些方法...
+我一般用这三种,cors,nginx反向代理,jsonp
+- `jsonp` : 单纯的 `get` 一些数据,局限性很大...就是利用`script`标签的`src`属性来实现跨域。
+- `nginx` 反向代理: 主要就是用了`nginx.conf`内的proxy_pass http://xxx.xxx.xxx,会把所有请求代理到那个域名,有利也有弊吧..
+- `cors`的话,可控性较强,需要前后端都设置,兼容性 IE10+ ,比如
+
+Access-Control-Allow-Origin: foo.example  // 子域乃至整个域名或所有域名是否允许访问
+Access-Control-Allow-Methods: POST, GET, OPTIONS // 允许那些行为方法
+Access-Control-Allow-Headers: X-PINGOTHER, Content-Type  // 允许的头部字段
+Access-Control-Max-Age: 86400  // 有效期
+
+Q: 对于想携带一些鉴权信息跨域如何走起?比如cookie!
+
+需要配置下 header Access-Control-Allow-Credentials:true ,具体用法看下面的nginxdemo
+
+当然cros的配置不仅仅这些,还有其他一些,具体引擎吧....
+
+若是我们要用 nginx或者 express 配置cors应该怎么搞起? 来个简易版本的
+- nginx
+```js
+location / {
+   # 检查域名后缀
+    add_header Access-Control-Allow-Origin xx.xx.com;
+    add_header Access-Control-Allow-Methods GET,POST,OPTIONS;
+    add_header Access-Control-Allow-Credentials true;
+    add_header Access-Control-Allow-Headers DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type;
+    add_header Access-Control-Max-Age 86400;
+} 
+```
+- express, 当然这货也有一些别人封装好的 cors中间件,操作性更强...
+```js
+let express = require('express');  
+let app = express();  
+
+//设置所有请求的头部
+app.all('*', (req, res, next) =>  {  
+    res.header("Access-Control-Allow-Origin", "xx.xx.com");  
+    res.header("Access-Control-Allow-Headers", "DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type");  
+    res.header("Access-Control-Allow-Credentials","true")
+    res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");  
+    next();  
+});  
+```
+### 对于XSS 和 CSRF 如何防范
+- XSS的防范
+
+  - 我能想到的就是转义<>这些造成代码直接运行的的标签..轮询或者正则替换
+     - 而面试官说这种的效率最低下,我回来仔细找了找相关资料好像没有更优方案...有的留言...
+  - 若是有用到 cookie,设置为http-only,避免客户端的篡改
+- CSRF的防范一般这几种
+  - 验证码,用户体验虽然不好,,但是很多场合下可以防范大多数攻击
+  - 验证 HTTP Referer 字段,判断请求来源
+  - token加密解密,这种是目前很常用的手段了...
+任何防范都有代价的,比如验证码造成的体验不好,token滥用造成的性能问题,轮询替换造成的响应时间等
+### 描述下cookie,sessionStorage,localStorage的差异..
+- cookie : 大小4KB 左右,跟随请求(请求头),会占用带宽资源,但是若是用来判断用户是否在线这些挺方便
+- sessionStorage和localStorage大同小异,大小看浏览器支持,一般为5MB,数据只保留在本地,不参与服务端交互.
+
+  - sessionStorage的生存周期只限于会话中,关闭了储存的数据就没了.
+  - localStorage则保留在本地,没有人为清除会一直保留
+### javascript的原型链你怎么理解?
+原型链算是 JS 内一种独有的机制,
+
+所有对象都有一个内置[[proto]]指向创建它的原型对象(prototype)
+
+原型链的基本用来实现继承用的
+### javascript里面的继承怎么实现，如何避免原型链上面的对象共享
+- ES5:寄生组合式继承:通过借用构造函数来继承属性和原型链来实现子继承父。
+```js
+
+    function ParentClass(name) {
+      this.name = name;
+    }
+    ParentClass.prototype.sayHello = function () {
+      console.log("I'm parent!" + this.name);
+    }
+    function SubClass(name, age) {
+      //若是要多个参数可以用apply 结合 ...解构
+      ParentClass.call(this, name);
+      this.age = age;
+    }
+    SubClass.prototype = Object.create(ParentClass.prototype);
+    SubClass.prototype.constructor = SubClass;
+    SubClass.prototype.sayChildHello = function (name) {
+      console.log("I'm child " + this.name)
+    }
+
+    let testA = new SubClass('CRPER')
+
+    // Object.create()的polyfill
+    /*
+    function pureObject(o){
+        //定义了一个临时构造函数
+         function F() {}
+         //将这个临时构造函数的原型指向了传入进来的对象。
+         F.prototype = obj;
+         //返回这个构造函数的一个实例。该实例拥有obj的所有属性和方法。
+         //因为该实例的原型是obj对象。
+         return new F();
+    }
+    */
+```
+- ES6: 其实就是ES5的语法糖,不过可读性很强..
+```js
+    class ParentClass {
+      constructor(name) {
+        this.name = name;
+      }
+      sayHello() {
+        console.log("I'm parent!" + this.name);
+      }
+    }
+
+    class SubClass extends ParentClass {
+      constructor(name) {
+        super(name);
+      }
+      sayChildHello() {
+        console.log("I'm child " + this.name)
+      }
+      // 重新声明父类同名方法会覆写,ES5的话就是直接操作自己的原型链上
+      sayHello(){
+        console.log("override parent method !,I'm sayHello Method")
+      }
+    }
+
+    let testA = new SubClass('CRPER')
+```
+### ES6+你熟悉么,用过哪些特性?
+- 箭头函数
+- 类及引入导出和继承( class/import/export/extends)
+- 字符串模板
+- Promise
+- let,const
+- async/await
+- 默认参数/参数或变量解构装饰器
+- Array.inclueds/String.padStart|String.padEnd/Object.assign
+### 箭头函数的this指向谁?
+- 肯定很多小伙伴会说指向局部方法内!!答案是错误的...
+- 箭头函数所改变的并非把 this 局部化，而是完全不把 this 绑定到里面去;
+- 就是 this 是取自外部的上下级作用域(但是又不是常规 function的语法糖)..
+- 因为箭头函数里并不支持 var self = this 或者 .bind(this) 这样的写法。
+### 问的时候你用过静态方法,静态属性,私有变量么?
+静态方法是ES6之后才有这么个玩意,有这么些特点
+
+- 方法不能给 this引用,可以给类直接引用
+- 静态不可以给实例调用,比如 let a = new ParentClass => a.sayHello() 会抛出异常
+- 父类静态方法,子类非static方法没法覆盖父类
+- 静态方法可以给子类继承
+- 静态属性可以继承也可以被修改
+```js
+
+ class ParentClass {
+      constructor(name) {
+        this.name = name;
+      }
+      static sayHello() {
+        console.log("I'm parent!" + this.name);
+      }
+
+      static testFunc(){
+        console.log('emm...Parent test static Func')
+      }
+    }
+
+    class SubClass extends ParentClass {
+      constructor(name) {
+        super(name);
+      }
+      sayChildHello() {
+        console.log("I'm child " + this.name)
+      }
+      static sayHello() {
+        console.log("override parent method !,I'm sayHello Method")
+      }
+
+      static testFunc2() {
+        console.log(super.testFunc() + 'fsdafasdf');
+      }
+    }
+    ParentClass.sayHello(); // success print
+
+    let a = new ParentClass('test');
+    a.sayHello() // throw error
+
+    SubClass.sayHello(); // 同名 static 可以继承且覆盖
+    
+    SubClass.testFunc2(); // 可以继承
+
+    let testA = new SubClass('CRPER');
+```
+WeakMap可以避免内存泄露,当没有被值引用的时候会自动给内存寄存器回收了.
+```js
+
+const _ = new WeakMap(); // 实例化,value 必须为对象,有 delete,get,has,set四个方法,看名字都知道了
+
+class TestWeakMap {
+  constructor(id, barcode) {
+    _.set(this, { id,barcode });
+  }
+  testFunc() {
+    let { id,barcode } = _.get(this); // 获取对应的值
+    return { id,barcode };
+  }
+}
+```
+当然你也可以用Symbol来实现一个私有变量,这也是一个好法子
+### 谈谈你对 Promise 的理解? 和 ajax 有关系么?
+`Promise`和`ajax`没有半毛钱直接关系.`promise`只是为了解决"回调地狱"而诞生的;
+
+平时结合 `ajax`是为了更好的梳理和控制流程...这里我们简单梳理下..
+
+`Promise`有三种状态,`Pending`/`resolve()`/`reject();`
+一些需要注意的小点,如下
+- 在 Pending 转为另外两种之一的状态时候,状态不可在改变..
+- Promise的 then为异步.而(new Promise())构造函数内为同步
+- Promise的catch不能捕获任意情况的错误(比如 then 里面的setTimout内手动抛出一个Error)
+- Promise的then返回Promise.reject()会中断链式调用
+- Promise的 resolve若是传入值而非函数,会发生值穿透的现象
+- Promise的catch还是then,return的都是一个新的 Promise(在 Promise 没有被中断的情况下)
+Promise 还有一些自带的方法,比如race,all,前者有任一一个解析完毕就返回,后者所有解析完毕返回...
+> 实现一个延时的 promise 函数, 可以用async和await
+```js
+
+const delay = (time)=> new Promise((resolve,reject)=>{
+  setTimeout(resolve,time)
+})
+
+
+// test
+
+let testRun = async function(){
+   console.log(1);
+   await delay(2000);
+   console.log('我两秒后才触发',3)
+} 
+
+// 1 => Promise = > 3
+```
+这段代码的运行结果是什么?
+```js
+var test = new Promise((resolve,reject)=>{
+   resolve();
+});
+
+test
+  .then(data => {
+    // promise start
+    console.log('promise first then : ', data);
+    return Promise.resolve(1); // p1
+  })
+  .then(data => {
+    // promise p1
+    console.log('get parent(p1) resolve data : ', data);
+    return Promise.reject(new Error('哎呀,中断了,你能奈我何!')); // p2
+   
+  })
+  .then(data => {
+    // promise p2
+    console.log('result of p2: ', data);
+    return Promise.resolve(3); // p3
+  })
+  .catch(err => {
+    console.log('err: ', err);
+    return false;
+  });
+  
+// promise first then :  undefined
+// get parent(p1) resolve data :  1
+// err:  Error: 哎呀,中断了,你能奈我何!
+
+// 这里在 then 返回 Promise.reject()的时候已经中断了链式调用.直接给 catch捕获到
+```
+别急,假如你不管有没有捕获到错误,最后再执行一个回调函数如何实现?
+这里说的就是类似try..catch..finally,给Promise实现一个 finally;
+```js
+// finally比较好加，按照现在社区的讨论，finally的特点如下： 
+// url : https://www.v2ex.com/t/205715  
+//1. 不接收任何参数，原来的value或者Error在finally里是收不到的 
+//2. 处理后不影响原Promise的状态，该reject还是reject，该resolve还是resolve 
+//3. 不影响Promise向后传递的传，resolve状态还是传递原来的value，reject状态还是传递原来的Error 
+
+Promise.prototype.finally = function (callback) {
+  let P = this.constructor; // 这里拿到的是 Promise 的构造函数
+  
+  //不管前面的 Promise 是fulfilled还是rejected，都会执行回调函数callback。
+  return this.then(
+    value  => P.resolve(callback()).then(() => value),
+    reason => P.resolve(callback()).then(() => { throw reason })
+  );
+};
+
+// 用法很简单,就是可以传入一个回调函数..
+// https://developers.google.com/web/updates/2017/10/promise-finally
+// 这个 url 中说了 node 及 chrome 的哪些版本已经实现了 finally 及用法
+// ES 2018已经把 finally 追加到 promise 的原型链中..
+```
 ### 参考文章
 
 - [fe-interview](https://microzz.com/2017/02/01/fe-interview/)
