@@ -108,3 +108,16 @@ React 并不是将 click 事件绑在该 div 的真实 DOM 上，而是在 docum
 setState 只在合成事件和钩子函数中是“异步”的，在原生事件和 setTimeout 中都是同步的。
 
 详情请阅读 饿了么-虹晨大佬的文章 [你真的理解setState吗？](https://juejin.im/post/5b45c57c51882519790c7441)
+### webpack 是什么?webpack 常见的优化手段有哪些;
+webpack 是一个资源处理工具,它的出现节省了我们的人力和时间; 可以对资源打包,解析,区分开发模式等等...
+
+常见的优化手段:
+
+- 分离第三方库(依赖),比如引入dll
+- 引入多进程编译,比如happypack
+- 提取公共的依赖模块,比如commonChunkPlugin
+- 资源混淆和压缩:比如UglifyJS
+- 分离样式这些,减小bundle chunk的大小,比如ExtractTextPlugin
+- GZIP 压缩,在打包的时候对资源对齐压缩,只要部署的服务器能解析即可..减少请求的大小
+- 还有按需加载这些,一般主流的框架都有对应的模块懒加载方式.
+- 至于tree shaking目前webpack3/4已经默认集成
