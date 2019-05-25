@@ -39,3 +39,14 @@ dom渲染完成时间： domContentLoadedEventEnd - navigationStart
 - 避免图片 src 为空
 - 把样式表放在  中
 - 把脚本放在页面底部
+### 你对优化这块了解多少?
+- 比如从客户端着手的:
+- 压缩代码(JS/CSS),压缩图片
+- 合并一些小图片(css sprite)
+- 若是打包的代码尽可能切割成多个 chunk,减少单一 chunk过大
+- 静态文件采用 cdn 引入
+- HTTP的缓存头使用的合理
+- 减小第三方库的依赖
+- 对于代码应该考虑性能来编写,比如使用requestAnimationFrame绘制动画,尽可能减少页面重绘(DOM 改变)
+- 渐进升级,引入preload这些预加载资源
+- 看情况用service worker来缓存资源(比如移动端打算搞 PWA)
