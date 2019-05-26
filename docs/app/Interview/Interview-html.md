@@ -559,3 +559,12 @@ xhr.setRequestHeader('Content-Type', 'application/json');
 
 xhr.send(null); // get方法 send null(亦或者不传,则直接是传递 header) ,post 的 send 则是传递值
 ```
+### img的title和alt有什么区别
+- title通常当鼠标滑动到元素上的时候显示
+- alt是<img>的特有属性，是图片内容的等价描述，用于图片无法加载时显示、读屏器阅读图片。可提图片高可访问性，除了纯装饰图片外都必须设置有意义的值，搜索引擎会重点分析。
+### Canvas和SVG有什么区别？
+- svg绘制出来的每一个图形的元素都是独立的DOM节点，能够方便的绑定事件或用来修改。canvas输出的是一整幅画布
+
+- svg输出的图形是矢量图形，后期可以修改参数来自由放大缩小，不会出现失真和锯齿。而canvas输出标量画布，就像一张图片一样，放大会失真或者出现锯齿
+
+
