@@ -693,3 +693,18 @@ animation-fill-mode: forwards;
 `!important` > 行内样式 > `id `> `class` > `tag`
 
 样式权重可以叠加, 比如 `id>class`
+### 伪元素有哪些？
+```css
+::after (:after)
+::backdrop 
+::before (:before)
+::cue (:cue)
+::first-letter (:first-letter)
+::first-line (:first-line)
+::grammar-error 
+::marker 
+::placeholder 
+::selection
+::slotted()
+::spelling-error 
+```
