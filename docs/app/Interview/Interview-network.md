@@ -585,3 +585,11 @@ TRACE方法被用于激发一个远程的，应用层的请求消息回路
 8、CONNECT方法
 
 把请求连接转换到透明的TCP/IP通道
+### 301和302 Http状态有啥区别？
+301，302 都是HTTP状态的编码，都代表着某个URL发生了转移，不同之处在于：
+
+- 301 redirect: 301 代表永久性转移(Permanently Moved)，
+
+- 302 redirect: 302 代表暂时性转移(Temporarily Moved )，
+
+当然　Http 状态 200 标示没有任何问题发生。
