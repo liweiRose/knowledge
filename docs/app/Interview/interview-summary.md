@@ -851,9 +851,94 @@ IE5.5及更早版本中的事件冒泡会跳过元素（从直接跳到document�
       }
   }
   ```
-
-  
-
 - ref是做什么的？
 
   标识dom的
+## 笔试题总结
+### http状态码301和302
+- 301 redirect: 301 代表永久性转移(Permanently Moved)
+
+- 302 redirect: 302 代表暂时性转移(Temporarily Moved )
+### http中常用的请求方法？
+①、GET：用于请求访问已被url识别的资源，可以通过url传参给服务器
+
+②、POST：用于传输信息给服务器
+
+③、PUT：传输文件，报文体中包含文件内容，保存在对应的url位置
+
+④、HEAD：获得报文首部，与GET方法相似，只是不返回报文主体，一般用于验证一个内容是否正常存在，或者url是否有效
+
+⑤、OPTIONS：返回服务器可用的方法（请求方法）
+
+⑥、TRACE：查看http协议有没被修改。
+
+⑦、DELETE ：删除对应url位置的文件
+### 正则表达式验证邮箱格式
+```js
+var reEmail=/^(\w+\.?)*\w+@(?:\w+\.)\w+$/;
+```
+### 判断一个对象是数字
+- instanceof
+instanceof运算符可以用来判断某个构造函数的prototype属性所指向的對象是否存在于另外一个要检测对象的原型链上。
+```js
+const a = [];
+const b = {};
+console.log(a instanceof Array);//true
+console.log(a instanceof Object);//true,在数组的原型链上也能找到Object构造函数
+console.log(b instanceof Array);//false
+```
+- constructor
+```js
+//定义一个数组
+const a = [];
+//作死将constructor属性改成了别的
+a.contrtuctor = Object;
+console.log(a.constructor == Array);//false (哭脸)
+console.log(a.constructor == Object);//true (哭脸)
+console.log(a instanceof Array);//true (instanceof火眼金睛)
+```
+- Object的toString方法
+```js
+const a = ['Hello','Howard'];
+const b = {0:'Hello',1:'Howard'};
+const c = 'Hello Howard';
+Object.prototype.toString.call(a);//"[object Array]"
+Object.prototype.toString.call(b);//"[object Object]"
+Object.prototype.toString.call(c);//"[object String]"
+```
+- isArray方法
+```js
+const a = [];
+const b = {};
+Array.isArray(a);//true
+Array.isArray(b);//false
+```
+### 获取浏览器的ua(userAgent)
+```js
+navigator.userAgent
+```
+### SPA实现history页面跳转常用的两个方法
+pushState()、replaceState()
+### web存储方式有哪些？
+- cookie
+- sessionStorage
+- localStorage
+- application cache（离线缓存）
+### 浏览器实现js多线程提供的原生对象是？
+web worker
+### css伪类清浮动
+```css
+.clearfix:after{
+  content: "020"; 
+  display: block; 
+  height: 0; 
+  clear: both; 
+  visibility: hidden;  
+  }
+
+.clearfix {
+  /* 触发 hasLayout */ 
+  zoom: 1; 
+  }
+```
+### css垂直居中
