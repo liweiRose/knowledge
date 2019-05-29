@@ -941,4 +941,130 @@ web worker
   zoom: 1; 
   }
 ```
-### css垂直居中
+### css水平垂直居中
+- 第一种
+```css
+#container{
+    position:relative;
+}
+#center{
+    width:100px;
+    height:100px;
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%);
+}
+```
+- 第二种
+```css
+#container{
+    position:relative;
+}
+
+#center{
+    width:100px;
+    height:100px;
+    position:absolute;
+    top:50%;
+    left:50%;
+    margin:-50px 0 0 -50px;
+}
+```
+- 第三种
+```css
+#container{
+    position:relative;
+}
+
+#center{
+    position:absolute;
+    margin:auto;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+}
+```
+- 第四种 flex
+```css
+#container{
+    display:flex;
+    justify-content:center;
+    align-items: center;
+}
+```
+### 跨域的解决方案
+原理是：动态插入script标签，通过script标签引入一个js文件，这个js文件载入成功后会执行我们在url参数中指定的函数，并且会把我们需要的json数据作为参数传入。
+
+由于同源策略的限制，XmlHttpRequest只允许请求当前源（域名、协议、端口）的资源，为了实现跨域请求，可以通过script标签实现跨域请求，然后在服务端输出JSON数据并执行回调函数，从而解决了跨域的数据请求。
+
+优点是兼容性好，简单易用，支持浏览器与服务器双向通信。缺点是只支持GET请求。
+
+JSONP：json+padding（内填充），顾名思义，就是把JSON填充到一个盒子里。
+```js
+<script>
+    function createJs(sUrl){
+
+        var oScript = document.createElement('script');
+        oScript.type = 'text/javascript';
+        oScript.src = sUrl;
+        document.getElementsByTagName('head')[0].appendChild(oScript);
+    }
+
+    createJs('jsonp.js');
+
+    box({
+       'name': 'test'
+    });
+
+    function box(json){
+        alert(json.name);
+    }
+</script>
+```
+- CORS
+
+  服务器端对于`CORS`的支持，主要就是通过设置`Access-Control-Allow-Origin`来进行的。如果浏览器检测到相应的设置，就可以允许`Ajax`进行跨域的访问。
+
+- 通过修改document.domain来跨子域
+
+  将子域和主域的`document.domain`设为同一个主域.前提条件：这两个域名必须属于同一个基础域名!而且所用的协议，端口都要一致，否则无法利用`document.domain`进行跨域。
+
+- 使用window.name来进行跨域
+
+  `window`对象有个`name`属性，该属性有个特征：即在一个窗口(window)的生命周期内,窗口载入的所有的页面都是共享一个`window.name`的，每个页面对`window.name`都有读写的权限，`window.name`是持久存在一个窗口载入过的所有页面中的。
+
+- 使用HTML5中新引进的`window.postMessage`方法来跨域传送数据.
+### 一个函数题
+- 实现一个函数，入参是一个字符串，判断字符串中是否包含重复字母，如果包含返回第一个重复字母的下标，不包含返回-1，（备注：时间复杂度越低越好，不允许使用indexof、正则等方法）。
+```js
+let str="liwierose";
+function foo(str){
+let arr=str.split('');
+ let len=arr.length;
+  let num=[];
+  for(let i=0;i<len;i++){
+    for(let j=i+1;j<len;j++){
+      if(arr[i]==arr[j]){
+        num.push(i);
+      }
+  }
+  }
+  if(num.length>0){
+    return num[0];
+  }else{
+  return -1;
+  }
+}
+console.log(foo(str));
+```
+### 使用Git命令行，创建一个feature/detail的分支，并推到远程；
+```js
+$ git checkout -b detail
+$ git push origin detail:detail
+
+```
+### 实现less的一个混合，或者sass的函数。
+- 要求：接受一个参数n（n的默认值为1），在文本溢出n行后，尾部变成省略号。
+。。。。待整理
