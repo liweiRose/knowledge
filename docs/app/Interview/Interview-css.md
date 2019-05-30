@@ -708,3 +708,40 @@ animation-fill-mode: forwards;
 ::slotted()
 ::spelling-error 
 ```
+### css sprite是什么,有什么优缺点
+css 雪碧图
+- 概念：将多个小图片拼接到一个图片中。通过background-position和元素尺寸调节需要显示的背景图案。
+- 优点：
+
+  - 减少HTTP请求数，极大地提高页面加载速度
+  - 增加图片信息重复度，提高压缩比，减少图片大小
+  - 更换风格方便，只需在一张或几张图片上修改颜色或样式即可实现
+- 缺点：
+
+  - 图片合并麻烦
+  - 维护麻烦，修改一个图片可能需要从新布局整个图片，样式
+  ### display: none;与visibility: hidden;的区别
+  - 联系：它们都能让元素不可见
+- 区别：
+
+  - display:none;会让元素完全从渲染树中消失，渲染的时候不占据任何空间；visibility: hidden;不会让元素从渲染树消失，渲染师元素继续占据空间，只是内容不可见
+
+  - display: none;是非继承属性，子孙节点消失由于元素从渲染树消失造成，通过修改子孙节点属性无法显示；visibility: hidden;是继承属性，子孙节点消失由于继承了hidden，通过设置visibility: visible;可以让子孙节点显式
+  - 修改常规流中元素的display通常会造成文档重排。修改visibility属性只会造成本元素的重绘。
+  - 读屏器不会读取display: none;元素内容；会读取visibility: hidden;元素内容
+### 如何创建块级格式化上下文(block formatting context),BFC有什么用
+- 创建规则：
+
+  - 根元素
+  - 浮动元素（float不是none）
+  - 绝对定位元素（position取值为absolute或fixed）
+
+  - display取值为inline-block,table-cell, table-caption,flex, inline-flex之一的元素
+
+  - overflow不是visible的元素
+
+- 作用：
+
+  - 可以包含浮动元素
+  - 不被浮动元素覆盖
+  - 阻止父子元素的margin折叠
