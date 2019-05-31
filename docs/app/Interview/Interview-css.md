@@ -745,3 +745,51 @@ css 雪碧图
   - 可以包含浮动元素
   - 不被浮动元素覆盖
   - 阻止父子元素的margin折叠
+### 清除浮动的几种方式，各自的优缺点
+- 父级div定义height
+
+- 结尾处加空div标签clear:both
+
+- 父级div定义伪类:after和zoom
+
+- 父级div定义overflow:hidden
+
+- 父级div也浮动，需要定义宽度
+- 结尾处加br标签clear:both
+
+- 比较好的是第3种方式，好多网站都这么用
+### CSS3新增伪类有那些？
+- p:first-of-type 选择属于其父元素的首个<p>元素的每个<p> 元素。
+
+- p:last-of-type  选择属于其父元素的最后 <p> 元素的每个<p> 元素。
+
+- p:only-of-type  选择属于其父元素唯一的 <p>元素的每个 <p> 元素。
+
+- p:only-child       选择属于其父元素的唯一子元素的每个 <p> 元素。
+
+- p:nth-child(2)  选择属于其父元素的第二个子元素的每个 <p> 元素。
+
+- :after        在元素之前添加内容,也可以用来做清除浮动。
+
+- :before       在元素之后添加内容
+- :enabled
+
+- :disabled      控制表单控件的禁用状态。
+
+- :checked       单选框或复选框被选中
+### display有哪些值？说明他们的作用
+- block      象块类型元素一样显示。
+
+- none      缺省值。象行内元素类型一样显示。
+
+- inline-block 象行内元素一样显示，但其内容象块类型元素一样显示。
+
+- list-item   象块类型元素一样显示，并添加样式列表标记。
+
+- table       此元素会作为块级表格来显示
+
+- inherit      规定应该从父元素继承 display 属性的值
+### 介绍一下标准的CSS的盒子模型？低版本IE的盒子模型有什么不同的？
+- 有两种， IE盒子模型、W3C盒子模型；
+- 盒模型： 内容(content)、填充(padding)、边界(margin)、 边框(border)；
+- 区 别： IE的content部分把 border 和 padding计算了进去;
