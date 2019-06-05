@@ -2079,7 +2079,28 @@ var transStr = tempArr.join(" "); // "I have a package";
 - this总是指向函数的直接调用者（而非间接调用者）
 - 如果有new关键字，this指向new出来的那个对象
 - 在事件中，this指向触发这个事件的对象，特殊的是，IE中的attachEvent中的this总是指向全局对象Window
+### offsetWidth/offsetHeight,clientWidth/clientHeight与scrollWidth/scrollHeight的区别
+- offsetWidth/offsetHeight返回值包含content + padding + border，效果与e.getBoundingClientRect()相同
 
+- clientWidth/clientHeight返回值只包含content + padding，如果有滚动条，也不包含滚动条
+
+
+- scrollWidth/scrollHeight返回值包含content + padding + 溢出内容的尺寸
+### javascript有哪些方法定义对象
+- 对象字面量： var obj = {};
+- 构造函数： var obj = new Object();
+- Object.create(): var obj = Object.create(Object.prototype);
+### 说几条写JavaScript的基本规范？
+- 不要在同一行声明多个变量
+- 请使用===/!==来比较true/false或者数值
+- 使用对象字面量替代new Array这种形式
+- 不要使用全局函数
+
+- Switch语句必须带有default分支
+
+- If语句必须使用大括号
+
+- for-in循环中的变量 应该使用var关键字明确限定作用域，从而避免作用域污
 
 ### 参考文章
 
