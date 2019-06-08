@@ -777,3 +777,83 @@ function binSearch(target, arr, start, end) {
 
 // 无序的数组则需要先排序好数组,否则会堆栈溢出(死循环)
 ```
+### 写一个通用的事件侦听器函数
+```js
+ // event(事件)工具集，来源：github.com/markyun
+    markyun.Event = {
+       
+        // 视能力分别使用dom0||dom2||IE方式 来绑定事件
+        // 参数： 操作的元素,事件名称 ,事件处理程序
+        addEvent : function(element, type, handler) {
+            if (element.addEventListener) {
+                //事件类型、需要执行的函数、是否捕捉
+                element.addEventListener(type, handler, false);
+            } else if (element.attachEvent) {
+                element.attachEvent('on' + type, function() {
+                    handler.call(element);
+                });
+            } else {
+                element['on' + type] = handler;
+            }
+        },
+        // 移除事件
+        removeEvent : function(element, type, handler) {
+            if (element.removeEventListener) {
+                element.removeEventListener(type, handler, false);
+            } else if (element.datachEvent) {
+                element.detachEvent('on' + type, handler);
+            } else {
+                element['on' + type] = null;
+            }
+        },
+        // 阻止事件 (主要是事件冒泡，因为IE不支持事件捕获)
+        stopPropagation : function(ev) {
+            if (ev.stopPropagation) {
+                ev.stopPropagation();
+            } else {
+                ev.cancelBubble = true;
+            }
+        },
+        // 取消事件的默认行为
+        preventDefault : function(event) {
+            if (event.preventDefault) {
+                event.preventDefault();
+            } else {
+                event.returnValue = false;
+            }
+        },
+        // 获取事件目标
+        getTarget : function(event) {
+            return event.target || event.srcElement;
+        }
+
+```
+### 如何判断一个对象是否为数组
+```js
+function isArray(arg) {
+    if (typeof arg === 'object') {
+        return Object.prototype.toString.call(arg) === '[object Array]';
+    }
+    return false;
+}
+```
+### 冒泡排序
+```js
+var arr = [3, 1, 4, 6, 5, 7, 2];
+
+function bubbleSort(arr) {
+    for (var i = 0; i < arr.length - 1; i++) {
+        for(var j = 0; j < arr.length - i - 1; j++) {
+            if(arr[j + 1] < arr[j]) {
+                var temp;
+                temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+    return arr;
+}
+
+console.log(bubbleSort(arr));
+```
