@@ -857,3 +857,64 @@ function bubbleSort(arr) {
 
 console.log(bubbleSort(arr));
 ```
+### 快速排序
+- 采用二分法，取出中间数，数组每次和中间数比较，小的放到左边，大的放到右边
+```js
+var arr = [3, 1, 4, 6, 5, 7, 2];
+
+function quickSort(arr) {
+    if(arr.length == 0) {
+        return [];    // 返回空数组
+    }
+
+    var cIndex = Math.floor(arr.length / 2);
+    var c = arr.splice(cIndex, 1);
+    var l = [];
+    var r = [];
+
+    for (var i = 0; i < arr.length; i++) {
+        if(arr[i] < c) {
+            l.push(arr[i]);
+        } else {
+            r.push(arr[i]);
+        }
+    }
+
+    return quickSort(l).concat(c, quickSort(r));
+}
+
+console.log(quickSort(arr));
+```
+### 编写一个方法 求一个字符串的字节长度
+- 假设：一个英文字符占用一个字节，一个中文字符占用两个字节
+```js
+function GetBytes(str){
+
+        var len = str.length;
+
+        var bytes = len;
+
+        for(var i=0; i<len; i++){
+
+            if (str.charCodeAt(i) > 255) bytes++;
+
+        }
+
+        return bytes;
+
+    }
+
+alert(GetBytes("你好,as"));
+```
+### bind的用法，以及如何实现bind的函数和需要注意的点
+- 
+bind的作用与call和apply相同，区别是call和apply是立即调用函数，而bind是返回了一个函数，需要调用的时候再执行。
+一个简单的bind函数实现如下
+```js
+Function.prototype.bind = function(ctx) {
+    var fn = this;
+    return function() {
+        fn.apply(ctx, arguments);
+    };
+};
+```
