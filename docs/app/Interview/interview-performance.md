@@ -77,3 +77,111 @@ dom渲染完成时间： domContentLoadedEventEnd - navigationStart
 - CSS跟HTML 分文件夹并行存放，命名都得统一（例如style.css）；
 - JS 分文件夹存放 命名以该JS功能为准的英文翻译。
 - 图片采用整合的 images.png png8 格式文件使用 - 尽量整合在一起使用方便将来的管理
+### 强类型检查
+- 用===代替 ==
+```js
+// 如果处理不当，它会极大地影响程序逻辑。这就像，你想向左走，但由于某种原因，你向右走
+0 == false // true
+0 === false // false
+2 == "2" // true
+2 === "2" // false
+
+// 例子
+const value = "500";
+if (value === 500) {
+  console.log(value);
+  // 条件不成立，不会进入
+}
+
+if (value === "500") {
+  console.log(value);
+  // 条件成立，会进入
+}
+```
+### 变量
+用知名其意的方式为变量命名，通过这种方式，当一个人看到它们时，易于搜索和理解。
+
+- 不好的方式：
+```js
+let daysSLV = 10;
+let y = new Date().getFullYear();
+
+let ok;
+if (user.age > 30) {
+  ok = true;
+}
+```
+- 好的方式：
+```s
+const MAX_AGE = 30;
+let daysSinceLastVisit = 10;
+let currentYear = new Date().getFullYear();
+
+...
+
+const isUserOlderThanAllowed = user.age > MAX_AGE;
+```
+不要在变量名中添加额外的不需要的单词。
+- 不好的方式：
+```js
+let nameValue;
+let theProduct;
+```
+- 好的方式：
+```js
+let name;
+let product;
+```
+不要简写变量上下文。
+- 不好的方式：
+```js
+const users = ["John", "Marco", "Peter"];
+users.forEach(u => {
+  doSomething();
+  doSomethingElse();
+  // ...
+  // ...
+  // ...
+  // ...
+  // 当上面代码很多的时候 ，这 `u` 是什么鬼
+  register(u);
+});
+```
+- 好的方式：
+```js
+const users = ["John", "Marco", "Peter"];
+users.forEach(user => {
+  doSomething();
+  doSomethingElse();
+  // ...
+  // ...
+  // ...
+  // ...
+  register(user);
+});
+```
+不要添加不必要的上下文。
+- 不好的方式：
+```js
+const user = {
+  userName: "John",
+  userSurname: "Doe",
+  userAge: "28"
+};
+
+...
+
+user.userName;
+```
+- 好的方式：
+```js
+const user = {
+  name: "John",
+  surname: "Doe",
+  age: "28"
+};
+
+...
+
+user.name;
+```
