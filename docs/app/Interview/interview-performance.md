@@ -185,3 +185,150 @@ const user = {
 
 user.name;
 ```
+### 函数
+使用长而具有描述性的名称。 考虑到函数表示某种行为，函数名称应该是动词或短​​语，用以说明其背后的意图以及参数的意图。 函数的名字应该说明他们做了什么。
+- 不好的方式：
+```js
+function notif(user) {
+  // implementation
+}
+```
+- 好的方式：
+```js
+function notifyUser(emailAddress) {
+  // implementation
+}
+```
+避免使用大量参数。 理想情况下，函数应该指定两个或更少的参数。 参数越少，测试函数就越容易，参数多的情况可以使用对象。
+- 不好的方式：
+```js
+function getUsers(fields, fromDate, toDate) {
+  // implementation
+}
+```
+- 好的方式：
+```js
+function getUsers({ fields, fromDate, toDate }) {
+  // implementation
+}
+
+getUsers({
+  fields: ['name', 'surname', 'email'],
+  fromDate: '2019-01-01',
+  toDate: '2019-01-18'
+});
+```
+使用默认参数替代 || 操作
+- 不好的方式：
+```js
+function createShape(type) {
+  const shapeType = type || "cube";
+  // ...
+}
+```
+- 好的方式：
+```js
+function createShape(type = "cube") {
+  // ...
+}
+```
+一个函数应该只做一件事，不要在一个函数中执行多个操作。
+- 不好的方式：
+```js
+function notifyUsers(users) {
+  users.forEach(user => {
+    const userRecord = database.lookup(user);
+    if (userRecord.isVerified()) {
+      notify(user);
+    }
+  });
+}
+```
+- 好的方式：
+```js
+function notifyVerifiedUsers(users) {
+  users.filter(isUserVerified).forEach(notify);
+}
+
+function isUserVerified(user) {
+  const userRecord = database.lookup(user);
+  return userRecord.isVerified();
+}
+```
+使用Object.assign设置对象默认值。
+- 不好的方式：
+```js
+const shapeConfig = {
+  type: "cube",
+  width: 200,
+  height: null
+};
+
+function createShape(config) {
+  config.type = config.type || "cube";
+  config.width = config.width || 250;
+  config.height = config.height|| 250;
+}
+
+
+createShape(shapeConfig);
+```
+- 好的方式：
+```js
+const shapeConfig = {
+  type: "cube",
+  width: 200
+  // Exclude the 'height' key
+};
+
+function createShape(config) {
+  config = Object.assign(
+    {
+      type: "cube",
+      width: 250,
+      height: 250
+    },
+    config
+  );
+
+  ...
+}
+
+createShape(shapeConfig);
+```
+不要使用标志作为参数，因为它们告诉函数做的比它应该做的多。
+- 不好的方式：
+```js
+function createFile(name, isPublic) {
+  if (isPublic) {
+    fs.create(`./public/${name}`);
+  } else {
+    fs.create(name);
+  }
+}
+```
+- 好的方式：
+```js
+function createFile(name) {
+  fs.create(name);
+}
+
+function createPublicFile(name) {
+  createFile(`./public/${name}`);
+}
+```
+不要污染全局变量。 如果需要扩展现有对象，请使用ES类和继承，而不是在原生对象的原型链上创建函数。
+- 不好的方式：
+```js
+Array.prototype.myFunc = function myFunc() {
+  // implementation
+};
+```
+- 好的方式：
+```js
+class SuperArray extends Array {
+  myFunc() {
+    // implementation
+  }
+}
+```
