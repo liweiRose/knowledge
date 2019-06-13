@@ -332,3 +332,90 @@ class SuperArray extends Array {
   }
 }
 ```
+### 条件
+避免使用反面条件。
+- 不好的方式：
+```js
+function isUserNotBlocked(user) {
+  // implementation
+}
+
+if (!isUserNotBlocked(user)) {
+  // implementation
+}
+```
+- 好的方式：
+```js
+function isUserBlocked(user) {
+  // implementation
+}
+
+if (isUserBlocked(user)) {
+  // implementation
+}
+```
+使用条件简写。这可能微不足道，但值得一提。仅对布尔值使用此方法，并且如果你确信该值不会是undefined 或null的，则使用此方法。
+- 不好的方式：
+```js
+if (isValid === true) {
+  // do something...
+}
+
+if (isValid === false) {
+  // do something...
+}
+```
+- 好的方式：
+```js
+if (isValid) {
+  // do something...
+}
+
+if (!isValid) {
+  // do something...
+}
+```
+尽可能避免条件句，而是使用多态性和继承。
+- 不好的方式：
+```js
+class Car {
+  // ...
+  getMaximumSpeed() {
+    switch (this.type) {
+      case "Ford":
+        return this.someFactor() + this.anotherFactor();
+      case "Mazda":
+        return this.someFactor();
+      case "McLaren":
+        return this.someFactor() - this.anotherFactor();
+    }
+  }
+}
+```
+- 好的方式：
+```js
+class Car {
+  // ...
+}
+
+class Ford extends Car {
+  // ...
+  getMaximumSpeed() {
+    return this.someFactor() + this.anotherFactor();
+  }
+}
+
+class Mazda extends Car {
+  // ...
+  getMaximumSpeed() {
+    return this.someFactor();
+  }
+}
+
+class McLaren extends Car {
+  // ...
+  getMaximumSpeed() {
+    return this.someFactor() - this.anotherFactor();
+  }
+}
+```
