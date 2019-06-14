@@ -419,3 +419,110 @@ class McLaren extends Car {
   }
 }
 ```
+### 类
+class 是JavaScript中新的语法糖。一切工作就像以前的原型，只是它现在看起来不同，你应该更喜欢他们比ES5普通功能。
+- 不好的方式：
+```js
+const Person = function(name) {
+  if (!(this instanceof Person)) {
+    throw new Error("Instantiate Person with `new` keyword");
+  }
+
+  this.name = name;
+};
+
+Person.prototype.sayHello = function sayHello() { /**/ };
+
+const Student = function(name, school) {
+  if (!(this instanceof Student)) {
+    throw new Error("Instantiate Student with `new` keyword");
+  }
+
+  Person.call(this, name);
+  this.school = school;
+};
+
+Student.prototype = Object.create(Person.prototype);
+Student.prototype.constructor = Student;
+Student.prototype.printSchoolName = function printSchoolName() { /**/ };
+```
+- 好的方式：
+```js
+class Person {
+  constructor(name) {
+    this.name = name;
+  }
+
+  sayHello() {
+    /* ... */
+  }
+}
+
+class Student extends Person {
+  constructor(name, school) {
+    super(name);
+    this.school = school;
+  }
+
+  printSchoolName() {
+    /* ... */
+  }
+}
+```
+使用链接。许多库(如jQuery和Lodash)都使用这种模式。在类中，只需在每个函数的末尾返回this就可以将更多的该类方法链接到它上。
+- 不好的方式：
+```js
+class Person {
+  constructor(name) {
+    this.name = name;
+  }
+
+  setSurname(surname) {
+    this.surname = surname;
+  }
+
+  setAge(age) {
+    this.age = age;
+  }
+
+  save() {
+    console.log(this.name, this.surname, this.age);
+  }
+}
+
+const person = new Person("John");
+person.setSurname("Doe");
+person.setAge(29);
+person.save();
+```
+- 好的方式：
+```js
+class Person {
+  constructor(name) {
+    this.name = name;
+  }
+
+  setSurname(surname) {
+    this.surname = surname;
+    // Return this for chaining
+    return this;
+  }
+
+  setAge(age) {
+    this.age = age;
+    // Return this for chaining
+    return this;
+  }
+
+  save() {
+    console.log(this.name, this.surname, this.age);
+    // Return this for chaining
+    return this;
+  }
+}
+
+const person = new Person("John")
+    .setSurname("Doe")
+    .setAge(29)
+    .save();
+```
