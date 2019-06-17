@@ -1068,3 +1068,121 @@ $ git push origin detail:detail
 ### 实现less的一个混合，或者sass的函数。
 - 要求：接受一个参数n（n的默认值为1），在文本溢出n行后，尾部变成省略号。
 。。。。待整理
+
+## 电面4（有赞）
+
+### 首先介绍下你自己
+我叫xxx,从事前端开发xxx年，.......
+### 如何遍历一个对象？
+`for in`、`Object.keys`、`Object.getOwnProperty`三种方法
+- 一、对非Array对象类型的遍历
+  - 1、for in
+  主要用于遍历对象的可枚举属性，包括自有属性、继承自原型的属性
+  ```js
+  var obj = {"name":"tom","sex":"male"}；
+
+  Object.defineProperty(obj, "age", {value:"18", enumerable:false});//增加不可枚举的属性age
+
+  Object.prototype.protoPer1 = function(){console.log("name is tom");};//通过原型链增加属性，为一个函数
+
+  Object.prototype.protoPer2 = 2;////通过原型链增加属性，为一个整型值2
+
+  for(var a in obj)
+
+  console.log(a);
+
+  //   name
+  //   sex
+  //   protoPer1
+  //   protoPer2
+  ```
+  `总结：for in 主要用于遍历对象的可枚举属性，包括自有属性、继承自原型的属性，示例中的属性age为不可可枚举，所以没有输出。
+  - 2、Object.keys
+
+  此方法返回一个数组，元素均为对象自有可枚举的属性
+  ```js
+  var obj = {"name":"tom","sex":"male"}；
+
+  Object.defineProperty(obj, "age", {value:"18", enumerable:false});//增加不可枚举的属性age
+
+  Object.prototype.protoPer1 = function(){console.log("name is tom");};//通过原型链增加属性，为一个函数
+
+  Object.prototype.protoPer2 = 2;////通过原型链增加属性，为一个整型值2
+
+  console.log(Object.keys(obj));
+  //  ["name","sex"]
+  ```
+  总结：Object.keys主要用于遍历对象自有的可枚举属性，不包括继承自原型的属性和不可枚举的属性。
+  - 3、Object.getOwnProperty
+  此方法用于返回对象的自有属性，包括可枚举和不可枚举的属性
+  ```js
+  var obj = {"name":"tom","sex":"male"}；
+
+  Object.defineProperty(obj, "age", {value:"18", enumerable:false});//增加不可枚举的属性age
+
+  Object.prototype.protoPer1 = function(){console.log("name is tom");};//通过原型链增加属性，为一个函数
+
+  Object.prototype.protoPer2 = 2;////通过原型链增加属性，为一个整型值2
+
+  console.log(Object.getOwnPropertyNames(obj));
+  //   ["name","sex","age"]
+  ```
+- 二、对Array对象类型的遍历
+  - 1、for in
+  ```js
+  var arr = [1,2,3,4,5,6];
+
+  for(var a in arr) console.log(a);
+  //0,1,2,3,4,5
+  ```
+  总结：输出为数组对象的index 值。
+  - 2、Object.keys
+  ```js
+  var arr = [1,2,3,4,5,6];
+
+  console.log(Object.keys(arr));
+
+  // ["0","1","2","3","4","5"]
+  ```
+  总结：输出为数组对象的index 值。
+  - 3、Object.getOwnProperty
+  ```js
+  var arr = [1,2,3,4,5,6];
+
+  console.log(Object.getOwnPropertyNames(arr));
+  //["0","1","2","3","4","5","length"]
+  ```
+  总结：输出为数组对象的index 值和数组长度的属性值。
+### 如何实现（iterator）遍历器
+```js
+  function makeIterator(array){
+	var nextIndex=0;
+	return {
+		next:function(){
+			//value属性表示当前成员的值，done属性是一个布尔值，表示遍历是否结束。
+			return nextIndex<array.length?{value:array[nextIndex],done:false}:{value:undefined,done:true};
+		}
+	};
+}
+```
+参考：[JavaScript遍历器](http://www.imooc.com/article/271863?block_id=tuijian_wz)
+### 如何判断一个对象是数组
+- object.isArray()
+- instanceOf
+- object.propertype.toString()
+### instanceOf的内部实现机制
+参考[浅谈 instanceof 和 typeof 的实现原理](https://juejin.im/post/5b0b9b9051882515773ae714)
+### ES6 模块与 CommonJS 模块的差异
+参考[阮一峰-Module 的加载实现](https://es6.ruanyifeng.com/#docs/module-loader)
+### 你会用的技术栈
+react
+### 使用react的版本
+项目中使用15.3版本以上，最新的是16.8版本
+### react16版本比15版本有什么改变
+生命周期变化。。。
+增加hook。。。
+### Component和PureComponent相关问题？
+除了为你提供了一个具有浅比较的shouldComponentUpdate方法，PureComponent和Component基本上完全相同。当props或者state改变时，PureComponent将对props和state进行浅比较。另一方面，Component不会比较当前和下个状态的props和state。因此，每当shouldComponentUpdate被调用时，组件默认的会重新渲染。
+参考[何时使用Component还是PureComponent？](https://segmentfault.com/a/1190000014979065)
+
+
