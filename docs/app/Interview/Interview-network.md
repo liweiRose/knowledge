@@ -604,3 +604,22 @@ PUT 和POST方法的区别是,PUT方法是幂等的：连续调用一次或者�
 除此之外还有一个区别，通常情况下，PUT的URI指向是具体单一资源，而POST可以指向资源集合。
 举个例子，我们在开发一个博客系统，当我们要创建一篇文章的时候往往用POST https://www.jianshu.com/articles，这个请求的语义是，在articles的资源集合下创建一篇新的文章，如果我们多次提交这个请求会创建多个文章，这是非幂等的。
 而PUT https://www.jianshu.com/articles/820357430的语义是更新对应文章下的资源（比如修改作者名称等），这个URI指向的就是单一资源，而且是幂等的，比如你把『刘德华』修改成『蔡徐坤』，提交多少次都是修改成『蔡徐坤』
+###  什么是跨域?
+跨域，指的是浏览器不能执行其他网站的脚本。它是由浏览器的同源策略造成的，是浏览器对JavaScript施加的安全限制。
+### 什么是同源策略？
+同源策略/SOP（Same origin policy）是一种约定，由Netscape公司1995年引入浏览器，它是浏览器最核心也最基本的安全功能，如果缺少了同源策略，浏览器很容易受到 XSS 、 CSFR 等攻击。所谓同源是指"协议+域名+端口"三者相同，即便两个不同的域名指向同一个ip地址，也非同源。
+- 同源策略限制了以下行为：
+  - Cookie、LocalStorage 和 IndexDB 无法读取
+  - DOM 和 JS对象无法获取
+  - Ajax请求发送不出去
+- 解决跨域
+  - jsonp 跨域
+  - document.domain + iframe 跨域
+  - window.name + iframe 跨域
+  - location.hash + iframe 跨域
+  - postMessage 跨域
+  - 跨域资源共享CORS
+  - withCredentials 属性
+  - WebSocket 协议跨域
+  - node 代理跨域
+  - nginx 代理跨域
