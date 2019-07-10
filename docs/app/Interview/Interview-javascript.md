@@ -2290,6 +2290,7 @@ console.log(obj3);
   - 4.不能处理 RegExp
   - 5.会忽略 symbol
   - 6.会忽略 undefined
+  
 2.实现一个 deepClone 函数
   - 1.如果是基本数据类型，直接返回
   - 2.如果是 RegExp 或者 Date 类型，返回对应类型
@@ -2322,10 +2323,96 @@ fonction deepClone(obj,hush=new WeakMap()){
 }
 ```
 ###  call/apply 的实现原理是什么？
+call 和 apply 的功能相同，都是改变 this 的执行，并立即执行函数。区别在于传参方式不同。
+- func.call(thisArg, arg1, arg2, ...)：第一个参数是 this 指向的对象，其它参数依次传入。
+- func.apply(thisArg, [argsArray])：第一个参数是 this 指向的对象，第二个参数是数组或类数组。
 
-### 柯里化函数实现
+一起思考一下，如何模拟实现 call ？
 
+首先，我们知道，函数都可以调用 call，说明 call 是函数原型上的方法，所有的实例都可以调用。即: Function.prototype.call。
+- 在 call 方法中获取调用call()函数
+- 如果第一个参数没有传入，那么默认指向 window / global(非严格模式)
+- 传入 call 的第一个参数是 this 指向的对象，根据隐式绑定的规则，我们知道 obj.foo(), foo() 中的 this 指向 obj;因此我们可以这样调用函数 thisArgs.func(...args)
+- 返回执行结果
+```js
+Function.prototype.call = function(){
+  let [thisArg ,...args] = [...arguments];
+  if(!thisArg){
+    //对象为null或undifiend
+    thisArg = typeof window === 'undifiend'?'global':'window';
+  }
+  //this的指向是当前func (func.call)
+  thisArg.func = this;
+  //执行函数
+  let result = thisArg.func(...args);//thisArg上并没有func属性，因此需要移除
+  delete thisArg.func;
+  return result;
+}
+```
+apply 的实现思路和 call 一致，仅参数处理略有差别。如下：
+```js
+Function.prototype.call = function(thisArg,rest){
+  let result;
+  if(!thisArg){
+    //对象为null或undifiend
+    thisArg = typeof window === 'undifiend'?'global':'window';
+  }
+  //this的指向是当前func (func.call)
+  thisArg.func = this;
+  //执行函数
+  if(!rest){
+    //第二个参数为null / undifined
+    result = thisArg.func();
+  }else{
+    result = thisArg.func(...rest);
+  }
+  delete thisArg.func;//thisArg上并没有func属性，因此需要移除
+  return result;
+}
+```
 ### 如何让 (a == 1 && a == 2 && a == 3) 的值为true？
+**1.利用隐式类型转换**
+
+ `==` 操作符在左右数据类型不一致时，会先进行隐式转换。
+
+ `a == 1 && a == 2 && a == 3` 的值意味着其不可能是基本数据类型。因为如果 a 是 null 或者是 undefined bool类型，都不可能返回true。
+
+ 因此可以推测 a 是复杂数据类型，JS 中复杂数据类型只有 object，回忆一下，Object 转换为原始类型会调用什么方法？
+ 
+- 如果部署了 [Symbol.toPrimitive] 接口，那么调用此接口，若返回的不是基本数据类型，抛出错误。
+
+- 如果没有部署 [Symbol.toPrimitive] 接口，那么根据要转换的类型，先调用 valueOf / toString
+  - 1.非Date类型对象，hint 是 default 时，调用顺序为：valueOf >>> toString，即valueOf 返回的不是基本数据类型，才会继续调用 valueOf，如果toString 返回的还不是基本数据类型，那么抛出错误。
+  - 2.如果 hint 是 string(Date对象的hint默认是string) ，调用顺序为：toString >>> valueOf，即toString 返回的不是基本数据类型，才会继续调用 valueOf，如果valueOf 返回的还不是基本数据类型，那么抛出错误。
+  - 3.如果 hint 是 number，调用顺序为： valueOf >>> toString
+```js
+//部署【Symbol.toPrimitive】 / valueOf  /toString 皆可
+//一次返回1，2，3即可
+let a = {
+  [Symbol.toPrimitive]:(function(hint){
+    let i = 1;
+    //闭包的特性之一  i不会被回收
+    return function (){
+      return i++;
+    }
+  })()
+}
+```
+**2.利用数据劫持(Proxy/Object.defineProperty)**
+```js
+let i = 1;
+let a = new Proxy({},{
+  i:1,
+  get:function(){
+    return () => this.i++;
+  }
+})
+```
+**3.数组的 toString 接口默认调用数组的 join 方法，重写 join 方法**
+```js
+let a = [1,2,3];
+a.join = a.shift;
+```
 
 ### 什么是BFC？BFC的布局规则是什么？如何创建BFC？
 
