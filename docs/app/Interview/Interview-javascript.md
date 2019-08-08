@@ -2449,7 +2449,33 @@ Formatting Context 有 BFC (Block formatting context)，IFC (Inline formatting c
 - 自适应多栏布局 (BFC的区域不会与float box重叠。因此，可以触发生成一个新的BFC)
 
 ### 异步加载JS脚本的方式有哪些？
+> 1.\<script\> 标签中增加 async(html5) 或者 defer(html4) 属性,脚本就会异步加载
 
+`defer` 和 `async` 的区别在于：
+
+- `defer` 要等到整个页面在内存中正常渲染结束（DOM 结构完全生成，以及其他脚本执行完成），在`window.onload` 之前执行；
+- `async` 一旦下载完，渲染引擎就会中断渲染，执行这个脚本以后，再继续渲染。
+- 如果有多个 `defer` 脚本，会按照它们在页面出现的顺序加载
+- 多个 `async` 脚本不能保证加载顺序
+> 2.动态创建 script 标签
+
+动态创建的 script ，设置 src 并不会开始下载，而是要添加到文档中，JS文件才会开始下载。
+```js
+let script = document.createElement('script');
+script.src = "xxx.js";
+document.body.append(script);
+```
+> 3.XHR 异步加载JS
+```js
+let xhr = new XMLHttpRequest();
+xhr.open("get","js/xxx.js",true);
+xhr.send();
+xhr.onreadystatechange = function(){
+  if(xhr.readyState == 4 && xhr.status ==200){
+    eval(xhr.responseText);
+  }
+}
+```
 ### ES5有几种方式可以实现继承？分别有哪些优缺点？
 
 ### 隐藏页面中的某个元素的方法有哪些？
