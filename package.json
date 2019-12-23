@@ -9,6 +9,6 @@
   "author": "liweirose",
   "license": "ISC",
   "devDependencies": {
-    "vuepress": "^0.10.0"
+    "vuepress": "^1.2.0"
   }
 }
