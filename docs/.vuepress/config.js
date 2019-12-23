@@ -162,6 +162,13 @@ module.exports = {
           'app/Lodash/Lodash-isObject'
         ]
       },
+      {
+        title: 'Plan List',
+        collapsable: true,
+        children: [
+          'app/PlanList/2019'
+        ]
+      },
     ]
   }
 };
