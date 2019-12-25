@@ -1,8 +1,8 @@
 # Event Loop
 
-javascript 是单线程语言，按顺序执行代码
+`javascript 是单线程语言，按顺序执行代码`
 
-## javascript 引擎执行机制
+## js引擎执行机制
 
 ```js
                             任务执行
