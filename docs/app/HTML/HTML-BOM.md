@@ -28,7 +28,7 @@ window.history.go(-1);  //访问浏览器窗口的历史，负数为后退，正
 
 window.history.back();  //同上  
 
-window.history.forward();  //同上  
+window.history.forward();  // 向前
 
 window.history.length  //可以查看历史中的页面数   
 ```
@@ -83,8 +83,7 @@ location.assign("http:www.baidu.com");  //同location.href，新地址都会被�
 location.replace("http:www.baidu.com");  //同assign()，但新地址不会被加到浏览器的历史栈中，不
 //能通过back和forward访问  
 
-location.reload(true | false);  //重新载入当前页面，为false时从浏览器缓存中重载，为true时从服
-//务器端重载，默认为false
+location.reload(true | false);  //重新载入当前页面，为false时从浏览器缓存中重载，为true时从服务器端重载，默认为false
 ```
 ## navigator对象
 `navigator`对象：包含大量有关Web浏览器的信息，在检测浏览器及操作系统上非常有用，也可用window.navigator引用它  

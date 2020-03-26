@@ -1,7 +1,7 @@
 module.exports = {
   base: '/knowledge/',
   dest: 'dist',
-  title: 'Summary of front-end knowledge system',
+  title: '前端知识点总结',
   port: 9090,
   description: 'Knowledge summary',
   serviceWorker: false,

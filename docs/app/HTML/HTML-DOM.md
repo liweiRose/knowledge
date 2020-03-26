@@ -41,9 +41,9 @@ HTML DOM 属性是我们可以在节点（HTML 元素）设置和修改的值。
 ## DOM - 事件
 HTML 事件的例子：
 
-onclick - 当用户点击鼠标时
-onload  - 当网页已加载时
-onmouseover 和 onmouseout - 当鼠标移动移出元素时
-onchange - 当输入字段被改变时
-onsubmit - 当 HTML 表单被提交时
-onkeydown - 当用户触发按键时
+- onclick - 当用户点击鼠标时
+- onload  - 当网页已加载时
+- onmouseover 和 onmouseout - 当鼠标移动移出元素时
+- onchange - 当输入字段被改变时
+- onsubmit - 当 HTML 表单被提交时
+- onkeydown - 当用户触发按键时

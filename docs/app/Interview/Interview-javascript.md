@@ -204,6 +204,48 @@ obj.__proto__ = Base.prototype;
 
 Base.call(obj);
 ```
+### new 的过程和实现
+```js
+/* 选自 yck 文章 */
+function create(Con, ...args) {
+  let obj = {}
+  Object.setPrototypeOf(obj, Con.prototype)
+  let result = Con.apply(obj, args)
+  return result instanceof Object ? result : obj
+}
+```
+如果你能清楚的了解上边代码的原理，请忽略。
+
+不然的话建议阅读下边大佬的文章。
+推荐 yck 的文章 [重学 JS 系列：聊聊 new 操作符](https://juejin.im/post/5c7b963ae51d453eb173896e)
+
+### new的实现原理是什么？
+
+`new` 的实现原理:
+
+1. 创建一个空对象，构造函数中的this指向这个空对象
+
+2. 这个新对象被执行 [[原型]] 连接
+
+3. 执行构造函数方法，属性和方法被添加到this引用的对象中
+
+4. 如果构造函数中没有返回其它对象，那么返回this，即创建的这个的新对象，否则，返回构造函数中返回的对象。
+```js
+function _new() {
+  let target = {}; //创建的新对象
+  //第一个参数是构造函数
+  let [constructor,...args] = [arguments];
+  //执行[[原型]]连接；targrt 是 constructor 的实例；
+  target._proto_ = constructor.prototype;
+  let result = constructor.apply(target,args);
+  if(result && (typeof (result) === "object" || typeof (result) === "function")){
+    //如果构造函数执行的结果返回的是个对象，那么就返回这个对象；
+    return result;
+  }
+  //如果构造函数返回的不是一个对象，返回创建的对象；
+  return target;
+}
+```
 
 ### js延迟加载的方式有哪些？
 
@@ -1245,20 +1287,6 @@ a = a[1];
 /* 方法五 */
 [a,b] = [b,a];
 ```
-### new 的过程和实现
-```js
-/* 选自 yck 文章 */
-function create(Con, ...args) {
-  let obj = {}
-  Object.setPrototypeOf(obj, Con.prototype)
-  let result = Con.apply(obj, args)
-  return result instanceof Object ? result : obj
-}
-```
-如果你能清楚的了解上边代码的原理，请忽略。
-
-不然的话建议阅读下边大佬的文章。
-推荐 yck 的文章 [重学 JS 系列：聊聊 new 操作符](https://juejin.im/post/5c7b963ae51d453eb173896e)
 ### JS 实现一个闭包函数,每次调用都自增1;
 ```js
 
@@ -2131,33 +2159,6 @@ var transStr = tempArr.join(" "); // "I have a package";
   - 优点：内置执行器、更好的语义、更广的适用性、返回的是Promise、结构清晰。
   - 缺点：错误处理机制
 
-### new的实现原理是什么？
-
-`new` 的实现原理:
-
-1. 创建一个空对象，构造函数中的this指向这个空对象
-
-2. 这个新对象被执行 [[原型]] 连接
-
-3. 执行构造函数方法，属性和方法被添加到this引用的对象中
-
-4. 如果构造函数中没有返回其它对象，那么返回this，即创建的这个的新对象，否则，返回构造函数中返回的对象。
-```js
-function _new() {
-  let target = {}; //创建的新对象
-  //第一个参数是构造函数
-  let [constructor,...args] = [arguments];
-  //执行[[原型]]连接；targrt 是 constructor 的实例；
-  target._proto_ = constructor.prototype;
-  let result = constructor.apply(target,args);
-  if(result && (typeof (result) === "object" || typeof (result) === "function")){
-    //如果构造函数执行的结果返回的是个对象，那么就返回这个对象；
-    return result;
-  }
-  //如果构造函数返回的不是一个对象，返回创建的对象；
-  return target;
-}
-```
 ###  如何正确判断this的指向？
 如果用一句话说明 this 的指向，那么即是: 谁调用它，this 就指向谁。
 

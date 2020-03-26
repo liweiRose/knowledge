@@ -18,9 +18,7 @@
 
 ```js
 
-  HTML                =>  DOM Tree
-
-                                          =>  Render tree  =>  Paint
+  HTML =>  DOM Tree =>  Render tree  =>  Paint
 
   stylesheets/style   => Styles struct
 

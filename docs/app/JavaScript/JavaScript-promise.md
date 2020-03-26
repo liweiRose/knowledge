@@ -79,7 +79,7 @@ getJSON('/posts.json')
   });
 ```
 
-### Promise.prototype.caych()
+### Promise.prototype.catch()
 
 ```js
 promise.catch(onRejected);

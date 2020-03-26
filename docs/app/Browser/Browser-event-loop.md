@@ -30,7 +30,7 @@
 
 ## micro task 和 macro task
 
-### micro task
+### 微任务（micro task）
 
 - callback
 - Promise
@@ -41,7 +41,7 @@
   - process.nextTick 这个名字有点误导，它是在本轮循环执行的，而且是所有异步任务里面最快执行的
   - 微任务队列追加在 process.nextTick 队列的后面，也属于本轮循环
 
-### macro task
+### 宏任务（macro task）
 
 - setTimeout
 - setInterval
